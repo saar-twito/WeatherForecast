@@ -39,7 +39,7 @@ export const getWeatherByQuery = createAsyncThunk(
   'weather/getWeatherDataByLocation',
   async (location: string) => {
     const result = await getWeatherDataByLocation(location)
-    return result;
+    return result.data;
   }
 )
 
@@ -72,8 +72,7 @@ export const weatherSlice = createSlice({
       .addCase(getWeatherByQuery.rejected, (state) => {
         state.status = "Filed"
       })
-      .addCase(getWeatherByQuery.fulfilled, (state, action) => {
-        const { data } = action.payload
+      .addCase(getWeatherByQuery.fulfilled, (state, { payload: data }) => {
         state.status = "Succeed"
         state.weatherData.nameOfCity = data.name;
         state.weatherData.countryShort = data.sys.country;
