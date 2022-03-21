@@ -1,0 +1,40 @@
+.info-wrapper {
+  width: fit-content;
+  margin-top: 60px;
+  margin: 0 auto;
+  font-family: "Montserrat", sans-serif;
+
+  .info {
+    h1 {
+      text-align: center;
+      color: snow;
+      font-weight: 600;
+      margin: 0;
+      font-size: 30px;
+      margin-top: 20px;
+    }
+    p {
+      text-align: center;
+      color: #ffffffa8;
+      font-size: 19px;
+    }
+  }
+
+  .temp {
+    background-color: #fffafa70;
+    padding: 24px;
+    width: -moz-fit-content;
+    width: fit-content;
+    margin: 20px auto;
+    border-radius: 7px;
+    color: snow;
+    font-weight: 600;
+    font-size: 37px;
+  }
+
+  p {
+    font-size: 22px;
+    color: snow;
+    margin-bottom: 15px;
+  }
+}

@@ -1,0 +1,22 @@
+@import "~bootstrap/scss/bootstrap";
+
+/* Basic setup */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.App {
+    height: 100vh;
+    font-family: "Inter", sans-serif;
+    &.sunny {
+        background-image: linear-gradient(to top, #e1ee4e, #97ed7c, #51e5a9, #0cd8cc, #3ec6da);
+    }
+
+    &.cold {
+        background-image: linear-gradient(to top, #ffffff, #7ea0ff, #6672bf, #294578, #1d2a42);
+    }
+}
