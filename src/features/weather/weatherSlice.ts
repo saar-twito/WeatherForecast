@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { City, CityWeatherData, WeatherState } from "./weather.interfaces";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { City, CityInformation, CityWeatherData, WeatherState } from "./weather.interfaces";
 
 import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, getWeatherDataByUserLocation, /* getWeatherDataByUserLocation */ } from "./weatherAPI";
 
@@ -7,6 +7,8 @@ import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, getWeatherDataByUserLoca
 const initialState: WeatherState = {
   cities: [],
   query: "Tel Aviv",
+  cityName: "",
+  countryNameShort: "",
   weatherData: {
     Temperature: {
       Metric: {
@@ -46,12 +48,23 @@ export const getDefaultCity = createAsyncThunk(
   }
 )
 
+/* accuWeather */
+// export const getWeatherByUserLocation = createAsyncThunk(
+//   'weather/getWeatherDataByUserLocation',
+//   async (coordinates: { latitude: number, longitude: number }): Promise<CityInformation> => {
+//     const response = await getWeatherDataByUserLocation(coordinates.latitude, coordinates.longitude);
+//     console.log("response", response)
+//     return response;
+//   }
+// )
 
+/* openWeatherMap */
 export const getWeatherByUserLocation = createAsyncThunk(
   'weather/getWeatherDataByUserLocation',
-  async (coordinates: { latitude: number, longitude: number }): Promise<CityWeatherData[]> => {
+  async (coordinates: { latitude: number, longitude: number }) => {
     const response = await getWeatherDataByUserLocation(coordinates.latitude, coordinates.longitude);
-    return response;
+    console.log("response", response)
+    return response.data;
   }
 )
 
@@ -62,7 +75,6 @@ export const weatherSlice = createSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     updateUserQuery: (state, action) => state.query = action.payload,
-    // isGeolocationAvailable: (state, action) => state.isGeolocationAvailable = action.payload
   },
   extraReducers: (builder) => {
 
@@ -99,28 +111,50 @@ export const weatherSlice = createSlice({
         state.status = "Filed";
       })
       .addCase(getDefaultCity.fulfilled, (state, { payload: data }) => {
-
         const { cities, cityWeatherData } = data;
         state.cities = [...cities]
         state.status = "Succeed"
         state.weatherData.WeatherText = cityWeatherData[0].WeatherText
         state.weatherData.Temperature.Metric = cityWeatherData[0].Temperature.Metric
         state.weatherData.Temperature.Imperial = cityWeatherData[0].Temperature.Imperial
+        state.cityName = cities[0].AdministrativeArea.LocalizedName;
+        state.countryNameShort = cities[0].Country.ID;
       })
 
+      /* accuWeather */
+      // .addCase(getWeatherByUserLocation.pending, (state) => {
+      //   state.status = "Loading";
+      // })
+      // .addCase(getWeatherByUserLocation.rejected, (state) => {
+      //   state.status = "Filed";
+      // })
+      // .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
+      //   state.status = "Succeed"
+      //   state.weatherData.Temperature = data.GeoPosition.Elevation;
+      //   state.cityName = data.AdministrativeArea.LocalizedName;
+      //   state.countryNameShort = data.AdministrativeArea.CountryID;
+      // })
 
-    // .addCase(getWeatherByUserLocation.pending, (state) => {
-    //   state.status = "Loading";
-    // })
-    // .addCase(getWeatherByUserLocation.rejected, (state) => {
-    //   state.status = "Filed";
-    // })
-    // .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
-    //   state.status = "Succeed"
-    // })
+
+
+      /* openWeatherMap */
+      .addCase(getWeatherByUserLocation.pending, (state) => {
+        state.status = "Loading";
+      })
+      .addCase(getWeatherByUserLocation.rejected, (state) => {
+        state.status = "Filed";
+      })
+      .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
+        state.status = "Succeed"
+        console.log(".addCase ~ data", data.main)
+        state.cityName = data.name;
+        state.weatherData.Temperature.Metric.Value = data.main.temp;
+        state.countryNameShort = data.sys.country;
+        state.weatherData.WeatherText = data.weather[0].description
+      })
   }
 });
 
-export const { updateUserQuery/* , isGeolocationAvailable */ } = weatherSlice.actions;
+export const { updateUserQuery } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

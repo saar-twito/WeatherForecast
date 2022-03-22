@@ -7,10 +7,10 @@ const ShowInfo = () => {
 
   return (
     <>
-      {weather.cities[0] ? <div className="info-wrapper">
+      {weather.cityName ? <div className="info-wrapper">
         <div className="info">
-          <h1>{weather.cities[0].LocalizedName}, {weather.cities[0].Country.ID}</h1>
-          <p>{weather.weatherData.WeatherText}</p>
+          <h1>{weather.cityName}, {weather.countryNameShort}</h1>
+          <p>{weather.weatherData?.WeatherText}</p>
         </div>
         <p className='temp'>{weather.weatherData.Temperature.Metric.Value}&#x2103;</p>
       </div> : null}

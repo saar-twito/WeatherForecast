@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Weather.scss'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { updateUserQuery/* , isGeolocationAvailable */, getDefaultCity } from './weatherSlice';
+import { updateUserQuery, getDefaultCity, getWeatherByUserLocation } from './weatherSlice';
 
 const Weather = () => {
 
@@ -14,17 +14,15 @@ const Weather = () => {
 
 
   useEffect(() => {
-     // getDefaultLocation()
+    getDefaultLocation()
   }, [])
 
 
   const canUserShareItsLocation = () => {
     if (navigator.geolocation) {
-    //  dispatch(isGeolocationAvailable(true));
       navigator.geolocation.getCurrentPosition(getUserWeatherLocation);
     }
     else {
-     // dispatch(isGeolocationAvailable(false))
       toast.info('Geolocation is not supported by this browser.', {
         position: toast.POSITION.BOTTOM_CENTER, autoClose: 3000,
         hideProgressBar: true
@@ -35,7 +33,7 @@ const Weather = () => {
 
   const getUserWeatherLocation = async (position: GeolocationPosition) => {
     try {
-      // await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
+      await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
     } catch (e: any) {
       toast.error(e.message, {
         position: toast.POSITION.BOTTOM_CENTER, autoClose: 2000,

@@ -1,49 +1,36 @@
 import axios from "axios";
-import { City, CityWeatherData } from "./weather.interfaces";
+import { City, CityInformation, CityWeatherData } from "./weather.interfaces";
 
-// const api = {
-//   baseURL: 'https://api.openweathermap.org/data/2.5/',
-//   privateAPIKey: 'e585dfa91c450088dd0e65783b0ba410'
-// };
-
-
-// export const getWeatherDataByLocation = async (location: string) => {
-//   try {
-//     return await axios.get(`${api.baseURL}weather?q=${location}&units=metric&appid=${api.privateAPIKey}`);
-//   } catch (error) {
-//     throw new Error("City not found");
-//   }
-
-// }
-
-// export const getWeatherDataByUserLocation = async (latitude: number, longitude: number) => {
-//   try {
-//     return await axios.get(`${api.baseURL}weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${api.privateAPIKey}`);
-//   } catch (error) {
-//     throw new Error("User location not found");
-//   }
-// }
 
 
 const api = {
-  baseURL: 'http://dataservice.accuweather.com/',
-  privateAPIKey: 'uhES8GnXteAv2Uj9Mmt456ABIWXREyyD'
+  accuWeather: {
+    baseURL: 'http://dataservice.accuweather.com/',
+    privateAPIKey: 'AtPEj8Z24vBscCViAWeH1xvgmURskCpc'
+  },
+  openWeatherMap: {
+    baseURL: 'https://api.openweathermap.org/data/2.5/',
+    privateAPIKey: 'e585dfa91c450088dd0e65783b0ba410'
+  }
 };
+
 
 
 export const getCitiesByQueryAPI = async (city: string): Promise<City[]> => {
   try {
-    const cities: City[] = await (await axios.get(`${api.baseURL}locations/v1/cities/autocomplete?apikey=${api.privateAPIKey}&q=${city}`)).data;
+    const cities: City[] = await (await axios.get(`${api.accuWeather.baseURL}locations/v1/cities/autocomplete?apikey=${api.accuWeather.privateAPIKey}&q=${city}`)).data;
     return cities
   } catch (error) {
     throw new Error("City not found");
   }
 }
 
-export const getDefaultCityWeatherAPI = async (defaultCity: string): Promise<{ cities: City[]; cityWeatherData: CityWeatherData[]; }> => {
+export const getDefaultCityWeatherAPI = async (defaultCity: string) => {
   try {
     const cities: City[] = await getCitiesByQueryAPI(defaultCity);
-    const cityWeatherData: CityWeatherData[] = await getWeatherByCity(cities[0].Key);
+    console.log("getDefaultCityWeatherAPI ~ cities", cities)
+    const cityWeatherData: CityWeatherData[] = await getWeatherByCityKey(cities[0].Key);
+    console.log("getDefaultCityWeatherAPI ~ cityWeatherData", cityWeatherData)
     return {
       cities,
       cityWeatherData
@@ -53,9 +40,9 @@ export const getDefaultCityWeatherAPI = async (defaultCity: string): Promise<{ c
   }
 }
 
-export const getWeatherByCity = async (locationKey: string): Promise<CityWeatherData[]> => {
+export const getWeatherByCityKey = async (locationKey: string): Promise<CityWeatherData[]> => {
   try {
-    const cityWeather: CityWeatherData[] = await (await axios.get(`${api.baseURL}currentconditions/v1/${locationKey}?apikey=${api.privateAPIKey}`)).data;
+    const cityWeather: CityWeatherData[] = await (await axios.get(`${api.accuWeather.baseURL}currentconditions/v1/${locationKey}?apikey=${api.accuWeather.privateAPIKey}`)).data;
     return cityWeather
   } catch (error) {
     throw new Error("getWeatherByCity Error");
@@ -63,13 +50,19 @@ export const getWeatherByCity = async (locationKey: string): Promise<CityWeather
 }
 
 
-export const getWeatherDataByUserLocation = async (latitude: number, longitude: number): Promise<CityWeatherData[]> => {
-  try {
-    const cityWeather: CityWeatherData[] = await (await axios.get(`${api.baseURL}locations/v1/cities/geoposition/search?apikey=${api.privateAPIKey}&q=${longitude},${latitude}`)).data;
-    return cityWeather
-  } catch (error) {
-    throw new Error("User location not found");
-  }
+// export const getWeatherDataByUserLocation = async (latitude: number, longitude: number): Promise<CityInformation> => {
+//   try {
+//     const cityWeather: CityInformation = await (await axios.get(`${api.accuWeather.baseURL}locations/v1/cities/geoposition/search?apikey=${api.accuWeather.privateAPIKey}&q=${latitude},${longitude}`)).data;
+//     return cityWeather
+//   } catch (error) {
+//     throw new Error("User location not found");
+//   }
+// }
+
+
+ /***  This openWeatherMap is more accurate than the accuWeather api ***/
+export const getWeatherDataByUserLocation = async (latitude: number, longitude: number) => {
+  return await axios.get(`${api.openWeatherMap.baseURL}weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${api.openWeatherMap.privateAPIKey}`);
 }
 
 
