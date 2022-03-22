@@ -29,8 +29,7 @@ const Weather = () => {
         position: toast.POSITION.BOTTOM_CENTER, autoClose: 3000,
         hideProgressBar: true
       });
-
-    } //setIsGeolocationAvailable(false) // Geolocation is not supported by this browser.
+    }
   }
 
 
@@ -68,6 +67,7 @@ const Weather = () => {
         <div className='search-location'>
           <input
             list="countries"
+            type='text'
             className="search-input-by-city"
             onChange={(e) => dispatch(updateUserQuery(e.target.value))}
             placeholder="Search by city name" />
