@@ -1,58 +1,57 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { City, CityWeatherData, WeatherState } from "./weather.interfaces";
 
-import { getWeatherDataByLocation, getWeatherDataByUserLocation } from "./weatherAPI";
+import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, getWeatherDataByUserLocation, /* getWeatherDataByUserLocation */ } from "./weatherAPI";
 
-/* Weather DTO */
-export interface WeatherState {
-  userLocation: string;
-  isGeolocationAvailable: boolean;
-  query: string;
-  weatherData: {
-    nameOfCity: string;
-    countryShort: string;
-    description: string;
-    temp: number;
-    feelsLike: number;
-    tempMax: number;
-    tempMin: number;
-  }
-  status: 'Loading' | 'Succeed' | 'Filed' | undefined
-}
 
-/* Initial State */
 const initialState: WeatherState = {
-  userLocation: "",
-  isGeolocationAvailable: false,
+  cities: [],
   query: "Tel Aviv",
   weatherData: {
-    nameOfCity: "",
-    countryShort: "",
-    description: "",
-    temp: 0,
-    feelsLike: 0,
-    tempMax: 0,
-    tempMin: 0,
+    Temperature: {
+      Metric: {
+        Value: 0,
+        Unit: "",
+        UnitType: ""
+      },
+      Imperial: {
+        Value: 0,
+        Unit: "",
+        UnitType: "",
+      }
+    },
+    WeatherText: "",
   },
   status: undefined,
 };
 
-/* Get weather data by query */
-export const getWeatherByQuery = createAsyncThunk(
-  'weather/getWeatherDataByLocation',
-  async (location: string) => {
+
+export const getCitiesByQuery = createAsyncThunk(
+  'weather/getCitiesByQuery',
+  async (location: string): Promise<City[]> => {
     // If getWeatherDataByLocation throws an error
     // We'll immediately move to the getWeatherByQuery.rejected.
-    const result = await getWeatherDataByLocation(location)
-    return result.data;
+    const result = await getCitiesByQueryAPI(location)
+    return result;
   }
 )
 
-/* Get weather data by user location */
+export const getDefaultCity = createAsyncThunk(
+  'weather/getDefaultCity',
+  async (defaultCity: string): Promise<{ cities: City[]; cityWeatherData: CityWeatherData[]; }> => {
+    // If getWeatherDataByLocation throws an error
+    // We'll immediately move to the getWeatherByQuery.rejected.
+    const result = await getDefaultCityWeatherAPI(defaultCity)
+    return result;
+  }
+)
+
+
 export const getWeatherByUserLocation = createAsyncThunk(
   'weather/getWeatherDataByUserLocation',
-  async (coordinates: { latitude: number, longitude: number }): Promise<any> => {
+  async (coordinates: { latitude: number, longitude: number }): Promise<CityWeatherData[]> => {
     const response = await getWeatherDataByUserLocation(coordinates.latitude, coordinates.longitude);
-    return response?.data;
+    return response;
   }
 )
 
@@ -62,19 +61,15 @@ export const weatherSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    updateUserQuery: (state, action) => {
-      state.query = action.payload;
-    },
-    isGeolocationAvailable: (state, action) => {
-      state.isGeolocationAvailable = action.payload;
-    },
+    updateUserQuery: (state, action) => state.query = action.payload,
+    // isGeolocationAvailable: (state, action) => state.isGeolocationAvailable = action.payload
   },
   extraReducers: (builder) => {
 
-    builder.addCase(getWeatherByQuery.pending, (state) => {
+    builder.addCase(getCitiesByQuery.pending, (state) => {
       state.status = "Loading";
     })
-      .addCase(getWeatherByQuery.rejected, (state) => {
+      .addCase(getCitiesByQuery.rejected, (state) => {
         state.status = "Filed"
       })
       // When we get an error like this:  
@@ -83,36 +78,49 @@ export const weatherSlice = createSlice({
       // for example - state.weatherData.nameOfCity = action.payload.data.name 
       // The line above is wrong because action.payload is already the data that we return.
       // Instead state.weatherData.nameOfCity = action.payload.name will be fine.
-      .addCase(getWeatherByQuery.fulfilled, (state, { payload: data }) => {
+      .addCase(getCitiesByQuery.fulfilled, (state, { payload: data }) => {
         state.status = "Succeed"
-        state.weatherData.nameOfCity = data.name;
-        state.weatherData.countryShort = data.sys.country;
-        state.weatherData.description = data.weather[0].description;
-        state.weatherData.temp = data.main.temp;
-        state.weatherData.feelsLike = data.main.feels_like;
-        state.weatherData.tempMax = data.main.temp_max;
-        state.weatherData.tempMin = data.main.temp_min;
+        state.cities = [...data]
+        // state.weatherData.nameOfCity = data.name;
+        // state.weatherData.countryShort = data.sys.country;
+        // state.weatherData.description = data.weather[0].description;
+        // state.weatherData.temp = data.main.temp;
+        // state.weatherData.feelsLike = data.main.feels_like;
+        // state.weatherData.tempMax = data.main.temp_max;
+        // state.weatherData.tempMin = data.main.temp_min;
+
       })
 
-      .addCase(getWeatherByUserLocation.pending, (state) => {
+
+      .addCase(getDefaultCity.pending, (state) => {
         state.status = "Loading";
       })
-      .addCase(getWeatherByUserLocation.rejected, (state, { payload }) => {
-        state.status = "Filed"
+      .addCase(getDefaultCity.rejected, (state) => {
+        state.status = "Filed";
       })
-      .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
+      .addCase(getDefaultCity.fulfilled, (state, { payload: data }) => {
+
+        const { cities, cityWeatherData } = data;
+        state.cities = [...cities]
         state.status = "Succeed"
-        state.weatherData.nameOfCity = data.name;
-        state.weatherData.countryShort = data.sys.country;
-        state.weatherData.description = data.weather[0].description;
-        state.weatherData.temp = data.main.temp;
-        state.weatherData.feelsLike = data.main.feels_like;
-        state.weatherData.tempMax = data.main.temp_max;
-        state.weatherData.tempMin = data.main.temp_min;
+        state.weatherData.WeatherText = cityWeatherData[0].WeatherText
+        state.weatherData.Temperature.Metric = cityWeatherData[0].Temperature.Metric
+        state.weatherData.Temperature.Imperial = cityWeatherData[0].Temperature.Imperial
       })
+
+
+    // .addCase(getWeatherByUserLocation.pending, (state) => {
+    //   state.status = "Loading";
+    // })
+    // .addCase(getWeatherByUserLocation.rejected, (state) => {
+    //   state.status = "Filed";
+    // })
+    // .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
+    //   state.status = "Succeed"
+    // })
   }
 });
 
-export const { updateUserQuery, isGeolocationAvailable } = weatherSlice.actions;
+export const { updateUserQuery/* , isGeolocationAvailable */ } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

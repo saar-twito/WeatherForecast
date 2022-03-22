@@ -3,23 +3,16 @@ import { useAppSelector } from '../../../app/hooks';
 import './ShowWeatherInfo.scss'
 
 const ShowInfo = () => {
-  const weather = useAppSelector(state => state.weather.weatherData);
+  const weather = useAppSelector(state => state.weather);
 
   return (
     <>
-      {weather.nameOfCity ? <div className="info-wrapper">
+      {weather.cities[0] ? <div className="info-wrapper">
         <div className="info">
-          <h1>{weather.nameOfCity}, {weather.countryShort}</h1>
-          <p>{weather.description}</p>
+          <h1>{weather.cities[0].LocalizedName}, {weather.cities[0].Country.ID}</h1>
+          <p>{weather.weatherData.WeatherText}</p>
         </div>
-        <p className='temp'>{weather.temp}&#x2103;</p>
-        {(weather.feelsLike === weather.tempMax) && (weather.tempMax === weather.tempMin) ? null :
-          <>
-            <p>Feels Like: {weather.feelsLike}&#x2103;</p>
-            <p>Max: {weather.tempMax}&#x2103;</p>
-            <p style={{ marginBottom: '0' }}>Min: {weather.tempMin}&#x2103;</p>
-          </>
-        }
+        <p className='temp'>{weather.weatherData.Temperature.Metric.Value}&#x2103;</p>
       </div> : null}
 
     </>
