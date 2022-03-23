@@ -2,7 +2,6 @@ import axios from "axios";
 import { City, CityInformation, CityWeatherInfo } from "./weather.interfaces";
 
 
-
 const api = {
   accuWeather: {
     baseURL: 'http://dataservice.accuweather.com/',
@@ -16,6 +15,7 @@ const api = {
 
 
 
+// Get list of cities base on search query
 export const getCitiesByQueryAPI = async (city: string) => {
   try {
     const cities: City[] = await (await axios.get(`${api.accuWeather.baseURL}locations/v1/cities/autocomplete?apikey=${api.accuWeather.privateAPIKey}&q=${city}`)).data;
@@ -25,6 +25,8 @@ export const getCitiesByQueryAPI = async (city: string) => {
   }
 }
 
+
+// Get the weather info of default city (Tel Aviv)
 export const getDefaultCityWeatherAPI = async (defaultCity: string) => {
   try {
     const cities: City[] = await getCitiesByQueryAPI(defaultCity);
@@ -38,6 +40,8 @@ export const getDefaultCityWeatherAPI = async (defaultCity: string) => {
   }
 }
 
+
+// Get the weather info of of selected city
 export const geCityWeatherInfoByCityKey = async (cityKey: string) => {
   try {
     const cityWeatherInfo: CityWeatherInfo[] = await (await axios.get(`${api.accuWeather.baseURL}currentconditions/v1/${cityKey}?apikey=${api.accuWeather.privateAPIKey}`)).data;
