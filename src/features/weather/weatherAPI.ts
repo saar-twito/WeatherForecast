@@ -6,7 +6,7 @@ import { City, CityInformation, CityWeatherInfo } from "./weather.interfaces";
 const api = {
   accuWeather: {
     baseURL: 'http://dataservice.accuweather.com/',
-    privateAPIKey: 'Erl8sgZ0VPN44W37ggDExUA1bh1KuFGr'
+    privateAPIKey: '0fM1A2pOxGhWXZ67VdzmXLbbT8WDnZ48'
   },
   openWeatherMap: {
     baseURL: 'https://api.openweathermap.org/data/2.5/',

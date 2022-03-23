@@ -4,7 +4,7 @@ import { BiLocationPlus } from "react-icons/bi";
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import {
   updateUserQuery,
-  getDefaultCity as requestDefaultCity,
+  requestDefaultCity,
   getWeatherByUserLocation,
   getCitiesByQuery,
   getWeatherByQuery,

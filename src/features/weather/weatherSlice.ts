@@ -36,8 +36,8 @@ export const getCitiesByQuery = createAsyncThunk(
   }
 )
 
-export const getDefaultCity = createAsyncThunk(
-  'weather/getDefaultCity',
+export const requestDefaultCity = createAsyncThunk(
+  'weather/requestDefaultCity',
   async (defaultCity: string): Promise<{ cities: City[]; cityWeatherData: CityWeatherInfo[]; }> => {
     return await getDefaultCityWeatherAPI(defaultCity)
   }
@@ -125,13 +125,13 @@ export const weatherSlice = createSlice({
       })
 
 
-      .addCase(getDefaultCity.pending, (state) => {
+      .addCase(requestDefaultCity.pending, (state) => {
         state.status = ActionStatus.LOADING;
       })
-      .addCase(getDefaultCity.rejected, (state) => {
+      .addCase(requestDefaultCity.rejected, (state) => {
         state.status = ActionStatus.FILED;
       })
-      .addCase(getDefaultCity.fulfilled, (state, { payload: data }) => {
+      .addCase(requestDefaultCity.fulfilled, (state, { payload: data }) => {
         const { cities, cityWeatherData } = data;
         state.cities = [...cities];
         state.status = ActionStatus.SUCCEED;
