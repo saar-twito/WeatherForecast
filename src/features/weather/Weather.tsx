@@ -1,11 +1,17 @@
 import { useEffect } from 'react'
 import ShowInfo from './ShowWeatherInfo/ShowWeatherInfo'
 import { BiLocationPlus } from "react-icons/bi";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './Weather.scss'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { updateUserQuery, getDefaultCity, getWeatherByUserLocation } from './weatherSlice';
+import {
+  updateUserQuery,
+  getDefaultCity as requestDefaultCity,
+  getWeatherByUserLocation,
+  getCitiesByQuery,
+  getWeatherByQuery,
+  updateCityDetails
+} from './weatherSlice';
+import './Weather.scss'
+import { showErrorNotification, showInfoNotification } from '../../shared/toastNotification';
 
 const Weather = () => {
 
@@ -14,65 +20,59 @@ const Weather = () => {
 
 
   useEffect(() => {
-    getDefaultLocation()
+    sendDefaultCity()
   }, [])
 
 
-  const canUserShareItsLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(getUserWeatherLocation);
+  const isUserGeolocationAvailable = () => {
+
+    // Check if geolocation available
+    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getUserWeatherLocation);
+    else showInfoNotification('location share is not supported by this browser.', 3000)
+
+    // Get user location coordinates
+    async function getUserWeatherLocation(position: GeolocationPosition) {
+      try {
+        await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
+      } catch (e: any) {
+        showErrorNotification(e.message)
+      }
+    }
+  }
+
+
+  const sendDefaultCity = async () => {
+    try {
+      await dispatch(requestDefaultCity(weather.userQuerySearch)).unwrap();
+    } catch (e: any) {
+      showErrorNotification(e.message)
+    }
+  }
+
+
+  const handleCitiesListSearch = async (query: string) => {
+    dispatch(updateUserQuery(query))
+
+    const city = weather.cities.find(c => `${c.Country.ID}, ${c.LocalizedName}` === query)
+    if (city) {
+      try {
+        dispatch(updateCityDetails(city))
+        await dispatch(getWeatherByQuery(city.Key)).unwrap();
+      } catch (e: any) {
+        showErrorNotification(e.message)
+      }
     }
     else {
-      toast.info('Geolocation is not supported by this browser.', {
-        position: toast.POSITION.BOTTOM_CENTER, autoClose: 3000,
-        hideProgressBar: true
-      });
-    }
-  }
-
-
-  const getUserWeatherLocation = async (position: GeolocationPosition) => {
-    try {
-      await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
-    } catch (e: any) {
-      toast.error(e.message, {
-        position: toast.POSITION.BOTTOM_CENTER, autoClose: 2000,
-        hideProgressBar: true
-      });
-    }
-  }
-
-  // unwrap()  - 
-  // dispatched return a promise that has an unwrap property,
-  // which can be called to extract the payload of a fulfilled action
-  // or to throw either the error 
-  const getDefaultLocation = async () => {
-    try {
-      await dispatch(getDefaultCity(weather.query)).unwrap();
-    } catch (e: any) {
-      toast.error(e.message, {
-        position: toast.POSITION.BOTTOM_CENTER, autoClose: 1500,
-        hideProgressBar: true
-      });
-    }
-  }
-
-
-  const handleCitiesList = async (query: string) => {
-    dispatch(updateUserQuery(query))
-    try {
-      //  await dispatch(getCitiesByQuery(query)).unwrap();
-    } catch (e: any) {
-      toast.error(e.message, {
-        position: toast.POSITION.BOTTOM_CENTER, autoClose: 1500,
-        hideProgressBar: true
-      });
+      try {
+        await dispatch(getCitiesByQuery(query)).unwrap();
+      } catch (e: any) {
+        showErrorNotification(e.message)
+      }
     }
   }
 
   return (
     <>
-    {console.log('weather',weather)}
       <div className="search-location-wrapper">
         <div className='search-location'>
           {/* <label htmlFor="city-search">search city</label> */}
@@ -80,18 +80,17 @@ const Weather = () => {
             list="countries"
             type='text'
             className="search-input-by-city"
-            onChange={(e) => handleCitiesList(e.target.value)}
+            onChange={(e) => handleCitiesListSearch(e.target.value)}
             placeholder="Search by city name" />
 
           <datalist id="countries">
-            {weather.cities.map((city) => <option key={city.Key} value={city.LocalizedName} />)}
-
+            {weather.cities?.map((city) => <option key={city.Key} value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
           </datalist>
 
           <button
             type='button'
             className="my-location"
-            onClick={() => canUserShareItsLocation()}><BiLocationPlus className="gps" />
+            onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="gps" />
             My Location
           </button>
         </div>
@@ -99,7 +98,7 @@ const Weather = () => {
         <button
           type="button"
           className="search"
-          onClick={() => getDefaultLocation()}>
+          onClick={() => handleCitiesListSearch(weather.userQuerySearch)}>
           Search
         </button>
 

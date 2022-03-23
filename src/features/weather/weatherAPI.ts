@@ -1,12 +1,12 @@
 import axios from "axios";
-import { City, CityInformation, CityWeatherData } from "./weather.interfaces";
+import { City, CityInformation, CityWeatherInfo } from "./weather.interfaces";
 
 
 
 const api = {
   accuWeather: {
     baseURL: 'http://dataservice.accuweather.com/',
-    privateAPIKey: 'AtPEj8Z24vBscCViAWeH1xvgmURskCpc'
+    privateAPIKey: 'Erl8sgZ0VPN44W37ggDExUA1bh1KuFGr'
   },
   openWeatherMap: {
     baseURL: 'https://api.openweathermap.org/data/2.5/',
@@ -16,7 +16,7 @@ const api = {
 
 
 
-export const getCitiesByQueryAPI = async (city: string): Promise<City[]> => {
+export const getCitiesByQueryAPI = async (city: string) => {
   try {
     const cities: City[] = await (await axios.get(`${api.accuWeather.baseURL}locations/v1/cities/autocomplete?apikey=${api.accuWeather.privateAPIKey}&q=${city}`)).data;
     return cities
@@ -28,24 +28,22 @@ export const getCitiesByQueryAPI = async (city: string): Promise<City[]> => {
 export const getDefaultCityWeatherAPI = async (defaultCity: string) => {
   try {
     const cities: City[] = await getCitiesByQueryAPI(defaultCity);
-    console.log("getDefaultCityWeatherAPI ~ cities", cities)
-    const cityWeatherData: CityWeatherData[] = await getWeatherByCityKey(cities[0].Key);
-    console.log("getDefaultCityWeatherAPI ~ cityWeatherData", cityWeatherData)
+    const cityWeatherData: CityWeatherInfo[] = await geCityWeatherInfoByCityKey(cities[0].Key);
     return {
       cities,
       cityWeatherData
     };
   } catch (error) {
-    throw new Error("getDefaultCityAPI Error");
+    throw new Error("City weather info is not available");
   }
 }
 
-export const getWeatherByCityKey = async (locationKey: string): Promise<CityWeatherData[]> => {
+export const geCityWeatherInfoByCityKey = async (cityKey: string) => {
   try {
-    const cityWeather: CityWeatherData[] = await (await axios.get(`${api.accuWeather.baseURL}currentconditions/v1/${locationKey}?apikey=${api.accuWeather.privateAPIKey}`)).data;
-    return cityWeather
+    const cityWeatherInfo: CityWeatherInfo[] = await (await axios.get(`${api.accuWeather.baseURL}currentconditions/v1/${cityKey}?apikey=${api.accuWeather.privateAPIKey}`)).data;
+    return cityWeatherInfo
   } catch (error) {
-    throw new Error("getWeatherByCity Error");
+    throw new Error("City weather info is not available");
   }
 }
 
@@ -60,8 +58,8 @@ export const getWeatherByCityKey = async (locationKey: string): Promise<CityWeat
 // }
 
 
- /***  This openWeatherMap is more accurate than the accuWeather api ***/
-export const getWeatherDataByUserLocation = async (latitude: number, longitude: number) => {
+/***  This openWeatherMap is more accurate than the accuWeather api ***/
+export const getWeatherInfoByUserLocation = async (latitude: number, longitude: number) => {
   return await axios.get(`${api.openWeatherMap.baseURL}weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${api.openWeatherMap.privateAPIKey}`);
 }
 

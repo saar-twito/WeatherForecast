@@ -16,7 +16,7 @@ export interface City {
 }
 
 // When i give a city key to grab the city temperature.
-export interface CityWeatherData {
+export interface CityWeatherInfo {
   Temperature: {
     Metric: {
       Value: number
@@ -56,11 +56,26 @@ export interface CityInformation {
   WeatherText: string;
 }
 
+export enum TemperatureUnits {
+  CELSIUS = "C",
+  FAHRENHEIT = 'F',
+}
+
+
+export enum ActionStatus {
+  LOADING = "Loading",
+  SUCCEED = "Succeed",
+  FILED = "Filed",
+  UNDEFINED = "undefined",
+}
+
+
 export interface WeatherState {
   cities: City[]
-  query: string;
+  userQuerySearch: string;
+  temperatureUnit: TemperatureUnits
   cityName: string
   countryNameShort: string
-  weatherData: CityWeatherData
-  status: 'Loading' | 'Succeed' | 'Filed' | undefined
+  cityWeatherInfo: CityWeatherInfo
+  status: ActionStatus
 }

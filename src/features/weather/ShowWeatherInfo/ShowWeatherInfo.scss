@@ -29,7 +29,24 @@
     border-radius: 7px;
     color: snow;
     font-weight: 600;
-    font-size: 37px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    :first-child {
+      font-size: 37px;
+      margin: 0;
+    }
+    :last-child {
+      position: absolute;
+      top: 0;
+      right: 8px;
+      font-size: large;
+      color: black;
+      cursor: pointer;
+      opacity: 0.6;
+    }
   }
 
   p {
