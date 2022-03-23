@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ActionStatus, City, CityInformation, CityWeatherInfo, TemperatureUnits, WeatherState } from "./weather.interfaces";
 
-import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, geCityWeatherInfoByCityKey, getWeatherInfoByUserLocation, /* getWeatherDataByUserLocation */ } from "./weatherAPI";
+import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, geCityWeatherInfoByCityKey, getWeatherInfoByUserLocation } from "./weatherAPI";
 
 
 const initialState: WeatherState = {
@@ -47,29 +47,25 @@ export const requestDefaultCity = createAsyncThunk(
 export const getWeatherByQuery = createAsyncThunk(
   'weather/getWeatherByQuery',
   async (cityKey: string): Promise<CityWeatherInfo[]> => {
-    // If getWeatherDataByLocation throws an error
-    // We'll immediately move to the getWeatherByQuery.rejected.
     return await geCityWeatherInfoByCityKey(cityKey)
   }
 )
 
 /* accuWeather */
-// export const getWeatherByUserLocation = createAsyncThunk(
-//   'weather/getWeatherDataByUserLocation',
-//   async (coordinates: { latitude: number, longitude: number }): Promise<CityInformation> => {
-//     const response = await getWeatherDataByUserLocation(coordinates.latitude, coordinates.longitude);
-//     console.log("response", response)
-//     return response;
-//   }
-// )
-
-/* openWeatherMap */
 export const getWeatherByUserLocation = createAsyncThunk(
   'weather/getWeatherDataByUserLocation',
-  async (coordinates: { latitude: number, longitude: number }) => {
-    return await (await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude)).data;
+  async (coordinates: { latitude: number, longitude: number }): Promise<CityInformation> => {
+    return await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude);
   }
 )
+
+/* openWeatherMap */
+// export const getWeatherByUserLocation = createAsyncThunk(
+//   'weather/getWeatherDataByUserLocation',
+//   async (coordinates: { latitude: number, longitude: number }) => {
+//     return await (await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude)).data;
+//   }
+// )
 
 
 export const weatherSlice = createSlice({
@@ -107,24 +103,21 @@ export const weatherSlice = createSlice({
   },
   extraReducers: (builder) => {
 
-    builder.addCase(getCitiesByQuery.pending, (state) => {
-      state.status = ActionStatus.LOADING;
-    })
+    builder
+      /* Get cities by query */
+      .addCase(getCitiesByQuery.pending, (state) => {
+        state.status = ActionStatus.LOADING;
+      })
       .addCase(getCitiesByQuery.rejected, (state) => {
         state.status = ActionStatus.FILED;
       })
-      // When we get an error like this:  
-      // A non-serializable value was detected in action.
-      // This means we don't access the data returned to us by createAsyncThunk.
-      // for example - state.weatherData.nameOfCity = action.payload.data.name 
-      // The line above is wrong because action.payload is already the data that we return.
-      // Instead state.weatherData.nameOfCity = action.payload.name will be fine.
       .addCase(getCitiesByQuery.fulfilled, (state, { payload: data }) => {
         state.status = ActionStatus.SUCCEED;
         state.cities = [...data];
       })
 
 
+      /* Get default city weather */ 
       .addCase(requestDefaultCity.pending, (state) => {
         state.status = ActionStatus.LOADING;
       })
@@ -142,23 +135,8 @@ export const weatherSlice = createSlice({
         state.countryNameShort = cities[0].Country.ID;
       })
 
-      /* accuWeather */
-      // .addCase(getWeatherByUserLocation.pending, (state) => {
-      //   state.status = ActionStatus.LOADING;
-      // })
-      // .addCase(getWeatherByUserLocation.rejected, (state) => {
-      //   state.status = ActionStatus.FILED;
-      // })
-      // .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
-      //   state.status = ActionStatus.SUCCEED
-      //   state.weatherData.Temperature = data.GeoPosition.Elevation;
-      //   state.cityName = data.AdministrativeArea.LocalizedName;
-      //   state.countryNameShort = data.AdministrativeArea.CountryID;
-      // })
 
-
-
-      /* openWeatherMap */
+      /* AccuWeather */
       .addCase(getWeatherByUserLocation.pending, (state) => {
         state.status = ActionStatus.LOADING;
       })
@@ -166,14 +144,29 @@ export const weatherSlice = createSlice({
         state.status = ActionStatus.FILED;
       })
       .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
-        state.status = ActionStatus.SUCCEED;
-        state.cityName = data.name;
-        state.cityWeatherInfo.Temperature.Metric.Value = data.main.temp;
-        state.cityWeatherInfo.Temperature.Imperial.Value = data.main.temp * 9 / 5 + 32;
-        state.countryNameShort = data.sys.country;
-        state.cityWeatherInfo.WeatherText = data.weather[0].description;
-        state.temperatureUnit = TemperatureUnits.CELSIUS;
+        state.status = ActionStatus.SUCCEED
+        state.cityWeatherInfo.Temperature = data.GeoPosition.Elevation;
+        state.cityName = data.AdministrativeArea.LocalizedName;
+        state.countryNameShort = data.AdministrativeArea.CountryID;
       })
+
+
+      /* OpenWeatherMap */
+      // .addCase(getWeatherByUserLocation.pending, (state) => {
+      //   state.status = ActionStatus.LOADING;
+      // })
+      // .addCase(getWeatherByUserLocation.rejected, (state) => {
+      //   state.status = ActionStatus.FILED;
+      // })
+      // .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
+      //   state.status = ActionStatus.SUCCEED;
+      //   state.cityName = data.name;
+      //   state.cityWeatherInfo.Temperature.Metric.Value = data.main.temp;
+      //   state.cityWeatherInfo.Temperature.Imperial.Value = data.main.temp * 9 / 5 + 32;
+      //   state.countryNameShort = data.sys.country;
+      //   state.cityWeatherInfo.WeatherText = data.weather[0].description;
+      //   state.temperatureUnit = TemperatureUnits.CELSIUS;
+      // })
 
 
       .addCase(getWeatherByQuery.pending, (state) => {
