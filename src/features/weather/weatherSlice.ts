@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActionStatus, City, CityInformation, CityWeatherInfo, TemperatureUnits, WeatherState } from "./weather.interfaces";
+import { ActionStatus, City, CityInformation, CityWeatherInfo, FiveDaysForecast, TemperatureUnits, CityWeatherState } from "./weather.interfaces";
 
-import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, geCityWeatherInfoByCityKey, getWeatherInfoByUserLocation } from "./weatherAPI";
+import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, geCityWeatherInfoByCityKey, getWeatherInfoByUserLocation, getFiveDaysForecast } from "./weatherAPI";
 
 
-const initialState: WeatherState = {
+const initialState: CityWeatherState = {
   cities: [],
+  fiveDaysForecast: {
+    Headline: {
+      Text: ""
+    },
+    DailyForecasts: [],
+  },
   userQuerySearch: "Tel Aviv",
   cityName: "",
   temperatureUnit: TemperatureUnits.CELSIUS,
@@ -43,7 +49,6 @@ export const requestDefaultCity = createAsyncThunk(
   }
 )
 
-
 export const getWeatherByQuery = createAsyncThunk(
   'weather/getWeatherByQuery',
   async (cityKey: string): Promise<CityWeatherInfo[]> => {
@@ -51,21 +56,29 @@ export const getWeatherByQuery = createAsyncThunk(
   }
 )
 
-/* accuWeather */
-export const getWeatherByUserLocation = createAsyncThunk(
-  'weather/getWeatherDataByUserLocation',
-  async (coordinates: { latitude: number, longitude: number }): Promise<CityInformation> => {
-    return await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude);
+
+export const getFiveDays = createAsyncThunk(
+  'weather/getFiveDays',
+  async (cityKey: string): Promise<FiveDaysForecast> => {
+    return await getFiveDaysForecast(cityKey)
   }
 )
 
-/* openWeatherMap */
+/* accuWeather */
 // export const getWeatherByUserLocation = createAsyncThunk(
 //   'weather/getWeatherDataByUserLocation',
-//   async (coordinates: { latitude: number, longitude: number }) => {
-//     return await (await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude)).data;
+//   async (coordinates: { latitude: number, longitude: number }): Promise<CityInformation> => {
+//     return await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude);
 //   }
 // )
+
+/* openWeatherMap */
+export const getWeatherByUserLocation = createAsyncThunk(
+  'weather/getWeatherDataByUserLocation',
+  async (coordinates: { latitude: number, longitude: number }) => {
+    return await (await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude)).data;
+  }
+)
 
 
 export const weatherSlice = createSlice({
@@ -117,7 +130,7 @@ export const weatherSlice = createSlice({
       })
 
 
-      /* Get default city weather */ 
+      /* Get default city weather */
       .addCase(requestDefaultCity.pending, (state) => {
         state.status = ActionStatus.LOADING;
       })
@@ -137,21 +150,6 @@ export const weatherSlice = createSlice({
 
 
       /* AccuWeather */
-      .addCase(getWeatherByUserLocation.pending, (state) => {
-        state.status = ActionStatus.LOADING;
-      })
-      .addCase(getWeatherByUserLocation.rejected, (state) => {
-        state.status = ActionStatus.FILED;
-      })
-      .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
-        state.status = ActionStatus.SUCCEED
-        state.cityWeatherInfo.Temperature = data.GeoPosition.Elevation;
-        state.cityName = data.AdministrativeArea.LocalizedName;
-        state.countryNameShort = data.AdministrativeArea.CountryID;
-      })
-
-
-      /* OpenWeatherMap */
       // .addCase(getWeatherByUserLocation.pending, (state) => {
       //   state.status = ActionStatus.LOADING;
       // })
@@ -159,14 +157,28 @@ export const weatherSlice = createSlice({
       //   state.status = ActionStatus.FILED;
       // })
       // .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
-      //   state.status = ActionStatus.SUCCEED;
-      //   state.cityName = data.name;
-      //   state.cityWeatherInfo.Temperature.Metric.Value = data.main.temp;
-      //   state.cityWeatherInfo.Temperature.Imperial.Value = data.main.temp * 9 / 5 + 32;
-      //   state.countryNameShort = data.sys.country;
-      //   state.cityWeatherInfo.WeatherText = data.weather[0].description;
-      //   state.temperatureUnit = TemperatureUnits.CELSIUS;
+      //   state.status = ActionStatus.SUCCEED
+      //   state.cityWeatherInfo.Temperature = data.GeoPosition.Elevation;
+      //   state.cityName = data.AdministrativeArea.LocalizedName;
+      //   state.countryNameShort = data.AdministrativeArea.CountryID;
       // })
+
+
+      /* OpenWeatherMap */
+      .addCase(getWeatherByUserLocation.pending, (state) => {
+        state.status = ActionStatus.LOADING;
+      })
+      .addCase(getWeatherByUserLocation.rejected, (state) => {
+        state.status = ActionStatus.FILED;
+      })
+      .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
+        state.status = ActionStatus.SUCCEED;
+        state.cityName = data.name;
+        state.cityWeatherInfo.Temperature.Metric.Value = data.main.temp;
+        state.cityWeatherInfo.Temperature.Imperial.Value = data.main.temp * 9 / 5 + 32;
+        state.countryNameShort = data.sys.country;
+        state.cityWeatherInfo.WeatherText = data.weather[0].description;
+      })
 
 
       .addCase(getWeatherByQuery.pending, (state) => {
@@ -180,6 +192,20 @@ export const weatherSlice = createSlice({
         state.cityWeatherInfo.WeatherText = data[0].WeatherText;
         state.cityWeatherInfo.Temperature.Metric = data[0].Temperature.Metric;
         state.cityWeatherInfo.Temperature.Imperial = data[0].Temperature.Imperial;
+      })
+
+
+      
+      .addCase(getFiveDays.pending, (state) => {
+        state.status = ActionStatus.LOADING;
+      })
+      .addCase(getFiveDays.rejected, (state) => {
+        state.status = ActionStatus.FILED;
+      })
+      .addCase(getFiveDays.fulfilled, (state, { payload: data }) => {
+        state.status = ActionStatus.SUCCEED;
+        state.fiveDaysForecast.Headline.Text = data.Headline.Text
+        state.fiveDaysForecast.DailyForecasts = [...data.DailyForecasts]
       })
   }
 });
