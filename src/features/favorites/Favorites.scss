@@ -1,0 +1,35 @@
+.favorites-cities-wrapper {
+  display: flex;
+  gap: 31px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  align-items: center;
+  justify-content: space-around;
+
+  .card {
+    width: 350px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      :last-child {
+        font-size: 19px;
+      }
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .card-link {
+        text-decoration: none;
+      }
+      :last-child {
+        font-size: 26px;
+      }
+    }
+  }
+}

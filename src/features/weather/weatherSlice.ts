@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActionStatus, City, CityInformation, CityWeatherInfo, FiveDaysForecast, TemperatureUnits, CityWeatherState } from "./weather.interfaces";
+import { City, CityInformation, CityWeatherInfo, FiveDaysForecast, TemperatureUnits, CityWeatherState } from "./weather.interfaces";
 
 import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, geCityWeatherInfoByCityKey, getWeatherInfoByUserLocation, getFiveDaysForecast } from "./weatherAPI";
 
@@ -100,7 +100,6 @@ export const weatherSlice = createSlice({
       }
     },
     updateCityDetails: (state, { payload }: PayloadAction<City>) => {
-      console.log("updateCityDetails", payload)
       state.cityName = payload.LocalizedName;
       state.countryNameShort = payload.Country.ID;
     },

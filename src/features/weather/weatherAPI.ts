@@ -4,7 +4,7 @@ import { City, CityInformation, CityWeatherInfo, FiveDaysForecast } from "./weat
 
 const api = {
   baseURL: 'http://dataservice.accuweather.com/',
-  privateAPIKey: '2jxDR4XfzLy6v8R33PxB2ABTm8UQYYcj'
+  privateAPIKey: '3KYF6eOBtg3INqeTA0glvSqNZ7aqsQ42'
 };
 
 

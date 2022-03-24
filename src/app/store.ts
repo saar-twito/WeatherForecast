@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import weatherReducer from '../features/weather/weatherSlice';
+import FavoriteCityReducer from '../features/favorites/favoritesSlice';
 
 export const store = configureStore({
   reducer: {
     weather: weatherReducer,
+    favorite: FavoriteCityReducer,
   },
 });
 

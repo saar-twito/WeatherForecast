@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import './App.scss';
 import NavigationBar from './shared/NavigationBar/NavigationBar';
 import Weather from './features/weather/Weather';
+import Favorites from './features/favorites/Favorites';
 
 const App = () => {
 
@@ -12,7 +13,7 @@ const App = () => {
         <NavigationBar />
         <Routes>
           <Route path="/weather" element={<Weather />} />
-          {/* <Route path="/favorites" element={<Favorites />} /> */}
+          <Route path="/favorites" element={<Favorites />} />
 
           {/* Default page */}
           <Route path="/" element={<Navigate replace to="/weather" />} />

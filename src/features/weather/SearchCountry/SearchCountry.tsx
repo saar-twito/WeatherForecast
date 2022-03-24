@@ -1,14 +1,15 @@
 import { BiLocationPlus } from 'react-icons/bi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
-import { showErrorNotification, showInfoNotification } from '../../../shared/toastNotification';
-import { CityWeatherState } from '../weather.interfaces';
+import { showErrorNotification, showInfoNotification, showSuccessNotification } from '../../../shared/toastNotification';
+import { FavoriteCity } from '../../favorites/favorites.interfaces';
+import { addCityToFavorite } from '../../favorites/favoritesSlice';
 import { updateUserQuery, updateCityDetails, getWeatherByQuery, getCitiesByQuery, getWeatherByUserLocation, getFiveDays, isUserAskedForItsLocation } from '../weatherSlice';
 import './SearchCountry.scss'
 
 // @Component - responsible for searching city and user location.
 const SearchCountry = () => {
 
-  const weather: CityWeatherState = useAppSelector((state) => state.weather)
+  const { weather, favorite } = useAppSelector((state) => state)
   const dispatch = useAppDispatch();
 
 
@@ -45,7 +46,6 @@ const SearchCountry = () => {
       dispatch(isUserAskedForItsLocation())
       try {
         const { cityInfo } = await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
-        console.log("getUserWeatherLocation ~ result", cityInfo)
         await dispatch(getFiveDays(cityInfo.Key)).unwrap();
       } catch (e: any) {
         showErrorNotification(e.message)
@@ -53,10 +53,28 @@ const SearchCountry = () => {
     }
   }
 
-
+  const handleFavoriteCity = () => {
+    const { cities, cityName, countryNameShort, cityWeatherInfo, fiveDaysForecast } = weather;
+    if (favorite.favoriteCities.find(c => c.cityKey === cities[0].Key)) {
+      showInfoNotification(`${cityName} already added to favorites list`, 3000)
+    }
+    else {
+      const cityToFavorite: FavoriteCity = {
+        cityKey: cities[0].Key,
+        cityName,
+        countryNameShort,
+        cityWeatherInfo,
+        shortDescription: cityWeatherInfo.WeatherText,
+        description: fiveDaysForecast.Headline.Text
+      }
+      dispatch(addCityToFavorite(cityToFavorite))
+      showSuccessNotification(`${cityName} was added to favorites list`, 3000)
+    }
+  }
 
   return (
     <div className="search-location-wrapper">
+      
       <div className='search-location'>
         <input
           list="countries"
@@ -86,15 +104,19 @@ const SearchCountry = () => {
             My Location
           </button>
         }
-
       </div>
 
-      <button
-        type="button"
-        className="search"
-        onClick={() => handleCitiesListSearch(weather.userQuerySearch)}>
-        Search
-      </button>
+      <div className="search-and-save-buttons-wrapper">
+        
+        <button
+          type="button"
+          className="search"
+          onClick={() => handleCitiesListSearch(weather.userQuerySearch)}>
+          Search
+        </button>
+
+        <button type="button" className="save" onClick={() => handleFavoriteCity()}>Save</button>
+      </div>
 
     </div>
 

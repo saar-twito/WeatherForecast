@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import Spinner from '../../../shared/Spinner/Spinner';
 import { CityWeatherState, TemperatureUnits } from '../weather.interfaces';
@@ -22,7 +21,6 @@ const ShowInfo = () => {
       </>
     )
   }
-
 
   const fahrenheitToCelsius = (fahrenheitMin: number, fahrenheitMax: number) => {
     return (
@@ -49,12 +47,12 @@ const ShowInfo = () => {
                 {weather.temperatureUnit === TemperatureUnits.CELSIUS ?
                   <>
                     <p>{weather.cityWeatherInfo.Temperature.Metric.Value.toFixed(1)}&#x2103;</p>
-                    <p onClick={() => dispatch(changeTempUnit())}>&#x2109;</p>
+                    <p className="unit" onClick={() => dispatch(changeTempUnit())}>&#x2109;</p>
                   </>
                   :
                   <>
                     <p>{weather.cityWeatherInfo.Temperature.Imperial.Value.toFixed(1)}&#x2109;</p>
-                    <p onClick={() => dispatch(changeTempUnit())}>&#x2103;</p>
+                    <p className="unit" onClick={() => dispatch(changeTempUnit())}>&#x2103;</p>
                   </>}
               </div>
 
@@ -84,7 +82,7 @@ const ShowInfo = () => {
         </>
 
         :
-        <Spinner/>
+        <Spinner />
       }
 
     </>

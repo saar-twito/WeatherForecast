@@ -1,6 +1,6 @@
-@mixin searchAndUserLocationButtons {
+@mixin searchAndUserLocationButtons($background) {
   padding: 5px;
-  background: #409eff;
+  background: $background;
   border: none;
   outline: none;
   color: snow;
@@ -32,7 +32,7 @@
     }
 
     .my-location {
-      @include searchAndUserLocationButtons();
+      @include searchAndUserLocationButtons(#409eff);
       display: flex;
 
       .gps {
@@ -41,7 +41,15 @@
       }
     }
   }
-  .search {
-    @include searchAndUserLocationButtons();
+  .search-and-save-buttons-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .search {
+      @include searchAndUserLocationButtons(#409eff);
+    }
+    .save {
+      @include searchAndUserLocationButtons(#20a366);
+    }
   }
 }

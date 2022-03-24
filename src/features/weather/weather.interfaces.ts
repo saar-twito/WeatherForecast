@@ -4,15 +4,6 @@ export enum TemperatureUnits {
 }
 
 
-export enum ActionStatus {
-  LOADING = "Loading",
-  SUCCEED = "Succeed",
-  FILED = "Filed",
-  UNDEFINED = "undefined",
-}
-
-
-
 // When i search for city.
 export interface City {
   Version: number,
@@ -55,20 +46,6 @@ export interface CityInformation {
   },
   EnglishName: string,
   Key: string,
-  GeoPosition: {
-    Elevation: {
-      Metric: {
-        Value: number,
-        Unit: string,
-        UnitType: string,
-      },
-      Imperial: {
-        Value: number,
-        Unit: string,
-        UnitType: string,
-      }
-    }
-  }
   WeatherText: string;
 }
 
