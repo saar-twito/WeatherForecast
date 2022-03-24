@@ -1,8 +1,18 @@
+@mixin searchAndUserLocationButtons {
+  padding: 5px;
+  background: #409eff;
+  border: none;
+  outline: none;
+  color: snow;
+  border-radius: 5px;
+}
+
 .search-location-wrapper {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: baseline;
   margin-top: 40px;
+  gap: 32px;
 
   .search-location {
     display: flex;
@@ -11,23 +21,18 @@
     align-items: baseline;
 
     .search-input-by-city {
-      border: none;
-      outline: none;
       background: snow;
       border-radius: 5px;
-      margin-bottom: 5px;
+      border: none;
       box-shadow: #88a5bf7a 4px 1px 10px 0px, #ffffffcc -3px -1px 10px 0px;
       font-family: "Inter", sans-serif;
+      margin-bottom: 5px;
+      outline: none;
       padding: 6px;
     }
 
     .my-location {
-      padding: 5px;
-      background: #409eff;
-      border: none;
-      outline: none;
-      color: snow;
-      border-radius: 5px;
+      @include searchAndUserLocationButtons();
       display: flex;
 
       .gps {
@@ -37,11 +42,6 @@
     }
   }
   .search {
-    padding: 5px;
-    background: #409eff;
-    border: none;
-    outline: none;
-    color: snow;
-    border-radius: 5px;
+    @include searchAndUserLocationButtons();
   }
 }

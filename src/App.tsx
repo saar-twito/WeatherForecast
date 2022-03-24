@@ -1,16 +1,10 @@
-import React from 'react';
 import { ToastContainer } from 'react-toastify';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import './App.scss';
 import NavigationBar from './shared/NavigationBar/NavigationBar';
 import Weather from './features/weather/Weather';
 
-const App: React.FC = () => {
+const App = () => {
 
   return (
     <div className="App cold">

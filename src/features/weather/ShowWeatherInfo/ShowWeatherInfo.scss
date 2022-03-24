@@ -10,13 +10,13 @@
       color: snow;
       font-weight: 600;
       margin: 0;
-      font-size: 30px;
+      font-size: 1.875rem;
       margin-top: 20px;
     }
     p {
       text-align: center;
       color: #ffffffa8;
-      font-size: 19px;
+      font-size: 1.1rem;
     }
   }
 
@@ -24,7 +24,6 @@
     box-shadow: #00000033 0px 8px 24px;
     background-color: #fffafa70;
     padding: 24px;
-    width: -moz-fit-content;
     width: 160px;
     margin: 20px auto;
     border-radius: 7px;
@@ -36,7 +35,7 @@
     position: relative;
 
     :first-child {
-      font-size: 37px;
+      font-size: 2.3rem;
       margin: 0;
     }
     :last-child {
@@ -51,21 +50,21 @@
   }
 
   p {
-    font-size: 22px;
+    font-size: 1.3rem;
     color: snow;
     margin-bottom: 15px;
   }
 }
 
-.ba{
+.forecast {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
   gap: 21px;
 
-  div{
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  .day {
+    box-shadow: #32325d40 0px 2px 5px -1px, #0000004d 0px 1px 3px -1px;
     background: aliceblue;
     width: 110px;
     height: 110px;
@@ -75,12 +74,12 @@
     align-items: center;
     border-radius: 10px;
 
-    header{
+    header {
       display: flex;
       width: -webkit-fill-available;
       justify-content: space-evenly;
       align-items: center;
-      :last-child{
+      :last-child {
         text-transform: uppercase;
       }
     }

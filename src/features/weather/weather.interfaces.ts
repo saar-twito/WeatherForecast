@@ -51,9 +51,10 @@ export interface CityWeatherInfo {
 export interface CityInformation {
   AdministrativeArea: {
     ID: string,
-    LocalizedName: string,
     CountryID: string,
   },
+  EnglishName: string,
+  Key: string,
   GeoPosition: {
     Elevation: {
       Metric: {
@@ -106,5 +107,5 @@ export interface CityWeatherState {
   cityName: string;
   countryNameShort: string;
   cityWeatherInfo: CityWeatherInfo;
-  status: ActionStatus;
+  isUserAskedForItsLocation: boolean;
 }

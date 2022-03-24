@@ -31,7 +31,7 @@ const initialState: CityWeatherState = {
     },
     WeatherText: "",
   },
-  status: ActionStatus.UNDEFINED,
+  isUserAskedForItsLocation: false
 };
 
 
@@ -64,22 +64,12 @@ export const getFiveDays = createAsyncThunk(
   }
 )
 
-/* accuWeather */
-// export const getWeatherByUserLocation = createAsyncThunk(
-//   'weather/getWeatherDataByUserLocation',
-//   async (coordinates: { latitude: number, longitude: number }): Promise<CityInformation> => {
-//     return await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude);
-//   }
-// )
-
-/* openWeatherMap */
 export const getWeatherByUserLocation = createAsyncThunk(
   'weather/getWeatherDataByUserLocation',
-  async (coordinates: { latitude: number, longitude: number }) => {
-    return await (await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude)).data;
+  async (coordinates: { latitude: number, longitude: number }): Promise<{ cityWeatherInfo: CityWeatherInfo[]; cityInfo: CityInformation; }> => {
+    return await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude);
   }
 )
-
 
 export const weatherSlice = createSlice({
   name: 'weather',
@@ -110,37 +100,27 @@ export const weatherSlice = createSlice({
       }
     },
     updateCityDetails: (state, { payload }: PayloadAction<City>) => {
+      console.log("updateCityDetails", payload)
       state.cityName = payload.LocalizedName;
       state.countryNameShort = payload.Country.ID;
+    },
+    isUserAskedForItsLocation: (state) => {
+      state.isUserAskedForItsLocation = true;
     },
   },
   extraReducers: (builder) => {
 
     builder
       /* Get cities by query */
-      .addCase(getCitiesByQuery.pending, (state) => {
-        state.status = ActionStatus.LOADING;
-      })
-      .addCase(getCitiesByQuery.rejected, (state) => {
-        state.status = ActionStatus.FILED;
-      })
-      .addCase(getCitiesByQuery.fulfilled, (state, { payload: data }) => {
-        state.status = ActionStatus.SUCCEED;
-        state.cities = [...data];
+      .addCase(getCitiesByQuery.fulfilled, (state, { payload }) => {
+        state.cities = [...payload];
       })
 
 
       /* Get default city weather */
-      .addCase(requestDefaultCity.pending, (state) => {
-        state.status = ActionStatus.LOADING;
-      })
-      .addCase(requestDefaultCity.rejected, (state) => {
-        state.status = ActionStatus.FILED;
-      })
-      .addCase(requestDefaultCity.fulfilled, (state, { payload: data }) => {
-        const { cities, cityWeatherData } = data;
+      .addCase(requestDefaultCity.fulfilled, (state, { payload }) => {
+        const { cities, cityWeatherData } = payload;
         state.cities = [...cities];
-        state.status = ActionStatus.SUCCEED;
         state.cityWeatherInfo.WeatherText = cityWeatherData[0].WeatherText;
         state.cityWeatherInfo.Temperature.Metric = cityWeatherData[0].Temperature.Metric;
         state.cityWeatherInfo.Temperature.Imperial = cityWeatherData[0].Temperature.Imperial;
@@ -148,68 +128,33 @@ export const weatherSlice = createSlice({
         state.countryNameShort = cities[0].Country.ID;
       })
 
-
-      /* AccuWeather */
-      // .addCase(getWeatherByUserLocation.pending, (state) => {
-      //   state.status = ActionStatus.LOADING;
-      // })
-      // .addCase(getWeatherByUserLocation.rejected, (state) => {
-      //   state.status = ActionStatus.FILED;
-      // })
-      // .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
-      //   state.status = ActionStatus.SUCCEED
-      //   state.cityWeatherInfo.Temperature = data.GeoPosition.Elevation;
-      //   state.cityName = data.AdministrativeArea.LocalizedName;
-      //   state.countryNameShort = data.AdministrativeArea.CountryID;
-      // })
-
-
-      /* OpenWeatherMap */
-      .addCase(getWeatherByUserLocation.pending, (state) => {
-        state.status = ActionStatus.LOADING;
-      })
       .addCase(getWeatherByUserLocation.rejected, (state) => {
-        state.status = ActionStatus.FILED;
+        state.isUserAskedForItsLocation = false;
       })
-      .addCase(getWeatherByUserLocation.fulfilled, (state, { payload: data }) => {
-        state.status = ActionStatus.SUCCEED;
-        state.cityName = data.name;
-        state.cityWeatherInfo.Temperature.Metric.Value = data.main.temp;
-        state.cityWeatherInfo.Temperature.Imperial.Value = data.main.temp * 9 / 5 + 32;
-        state.countryNameShort = data.sys.country;
-        state.cityWeatherInfo.WeatherText = data.weather[0].description;
-      })
-
-
-      .addCase(getWeatherByQuery.pending, (state) => {
-        state.status = ActionStatus.LOADING;
-      })
-      .addCase(getWeatherByQuery.rejected, (state) => {
-        state.status = ActionStatus.FILED;
-      })
-      .addCase(getWeatherByQuery.fulfilled, (state, { payload: data }) => {
-        state.status = ActionStatus.SUCCEED;
-        state.cityWeatherInfo.WeatherText = data[0].WeatherText;
-        state.cityWeatherInfo.Temperature.Metric = data[0].Temperature.Metric;
-        state.cityWeatherInfo.Temperature.Imperial = data[0].Temperature.Imperial;
+      .addCase(getWeatherByUserLocation.fulfilled, (state, { payload }) => {
+        state.isUserAskedForItsLocation = false;
+        const { cityWeatherInfo, cityInfo } = payload;
+        state.cityWeatherInfo.Temperature = cityWeatherInfo[0].Temperature;
+        state.cityName = cityInfo.EnglishName;
+        state.countryNameShort = cityInfo.AdministrativeArea.CountryID;
       })
 
 
-      
-      .addCase(getFiveDays.pending, (state) => {
-        state.status = ActionStatus.LOADING;
+      .addCase(getWeatherByQuery.fulfilled, (state, { payload }) => {
+        state.cityWeatherInfo.WeatherText = payload[0].WeatherText;
+        state.cityWeatherInfo.Temperature.Metric = payload[0].Temperature.Metric;
+        state.cityWeatherInfo.Temperature.Imperial = payload[0].Temperature.Imperial;
       })
-      .addCase(getFiveDays.rejected, (state) => {
-        state.status = ActionStatus.FILED;
+
+
+      .addCase(getFiveDays.fulfilled, (state, { payload }) => {
+        state.fiveDaysForecast.Headline.Text = payload.Headline.Text
+        state.fiveDaysForecast.DailyForecasts = [...payload.DailyForecasts]
       })
-      .addCase(getFiveDays.fulfilled, (state, { payload: data }) => {
-        state.status = ActionStatus.SUCCEED;
-        state.fiveDaysForecast.Headline.Text = data.Headline.Text
-        state.fiveDaysForecast.DailyForecasts = [...data.DailyForecasts]
-      })
+
   }
 });
 
-export const { updateUserQuery, changeTempUnit, updateCityDetails } = weatherSlice.actions;
+export const { updateUserQuery, changeTempUnit, updateCityDetails, isUserAskedForItsLocation } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

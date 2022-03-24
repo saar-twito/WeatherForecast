@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import Spinner from '../../../shared/Spinner/Spinner';
 import { CityWeatherState, TemperatureUnits } from '../weather.interfaces';
 import { changeTempUnit } from '../weatherSlice';
 import './ShowWeatherInfo.scss'
@@ -10,15 +11,15 @@ const ShowInfo = () => {
   const dispatch = useAppDispatch();
 
 
-  const handleDate = (date: string) => {
+  const handleDateFormat = (date: string) => {
     const formattedDate = date.substring(5, 10).replace('-', '/');
     const nameOfDay = new Date(date).toDateString().substring(0, 4)
 
     return (
-      <header>
+      <>
         <p>{formattedDate}</p>
         <p>{nameOfDay}</p>
-      </header>
+      </>
     )
   }
 
@@ -36,10 +37,14 @@ const ShowInfo = () => {
         <>
           <>
             <div className="info-wrapper">
+
+              {/* City and current city's temperature */}
               <div className="info">
                 <h1>{weather.cityName}, {weather.countryNameShort}</h1>
                 <p>{weather.cityWeatherInfo?.WeatherText}</p>
               </div>
+
+              {/* Switch between units (C,F) */}
               <div className='temp'>
                 {weather.temperatureUnit === TemperatureUnits.CELSIUS ?
                   <>
@@ -52,22 +57,26 @@ const ShowInfo = () => {
                     <p onClick={() => dispatch(changeTempUnit())}>&#x2103;</p>
                   </>}
               </div>
+
             </div>
           </>
 
-          <div className="ba">
+          <div className="forecast">
             {weather.fiveDaysForecast.DailyForecasts.map((day) => {
               return (
-                <div key={day.Date}>
-                  {handleDate(day.Date)}
+                <div className="day" key={day.Date}>
+
+                  <header>
+                    {handleDateFormat(day.Date)}
+                  </header>
 
                   <footer>
                     {weather.temperatureUnit === TemperatureUnits.CELSIUS ?
                       fahrenheitToCelsius(day.Temperature.Minimum.Value, day.Temperature.Maximum.Value) :
                       <p>{day.Temperature.Minimum.Value.toFixed(1)}-{day.Temperature.Maximum.Value.toFixed(1)}</p>
                     }
-
                   </footer>
+
                 </div>
               )
             })}
@@ -75,8 +84,9 @@ const ShowInfo = () => {
         </>
 
         :
-        null
+        <Spinner/>
       }
+
     </>
   )
 }

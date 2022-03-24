@@ -2,7 +2,7 @@ import { BiLocationPlus } from 'react-icons/bi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { showErrorNotification, showInfoNotification } from '../../../shared/toastNotification';
 import { CityWeatherState } from '../weather.interfaces';
-import { updateUserQuery, updateCityDetails, getWeatherByQuery, getCitiesByQuery, getWeatherByUserLocation } from '../weatherSlice';
+import { updateUserQuery, updateCityDetails, getWeatherByQuery, getCitiesByQuery, getWeatherByUserLocation, getFiveDays, isUserAskedForItsLocation } from '../weatherSlice';
 import './SearchCountry.scss'
 
 // @Component - responsible for searching city and user location.
@@ -14,12 +14,12 @@ const SearchCountry = () => {
 
   const handleCitiesListSearch = async (query: string) => {
     dispatch(updateUserQuery(query))
-
     const city = weather.cities.find(c => `${c.Country.ID}, ${c.LocalizedName}` === query)
     if (city) {
       try {
         dispatch(updateCityDetails(city))
         await dispatch(getWeatherByQuery(city.Key)).unwrap();
+        await dispatch(getFiveDays(city.Key)).unwrap();
       } catch (e: any) {
         showErrorNotification(e.message)
       }
@@ -42,8 +42,11 @@ const SearchCountry = () => {
 
     // Get user location coordinates
     async function getUserWeatherLocation(position: GeolocationPosition) {
+      dispatch(isUserAskedForItsLocation())
       try {
-        await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
+        const { cityInfo } = await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
+        console.log("getUserWeatherLocation ~ result", cityInfo)
+        await dispatch(getFiveDays(cityInfo.Key)).unwrap();
       } catch (e: any) {
         showErrorNotification(e.message)
       }
@@ -66,12 +69,24 @@ const SearchCountry = () => {
           {weather.cities?.map((city) => <option key={city.Key} value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
         </datalist>
 
-        <button
-          type='button'
-          className="my-location"
-          onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="gps" />
-          My Location
-        </button>
+
+        {weather.isUserAskedForItsLocation ?
+
+          <button className="btn btn-primary" type="button" disabled>
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading...
+          </button>
+
+          :
+
+          <button
+            type='button'
+            className="my-location"
+            onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="gps" />
+            My Location
+          </button>
+        }
+
       </div>
 
       <button
