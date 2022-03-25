@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { FavoritesCitiesState } from './favorites.interfaces';
+import { FavoritesCitiesState, GoBackToFavoriteCity } from './favorites.interfaces';
 import { MdDeleteOutline } from "react-icons/md";
 import { removeCityFromFavorite } from './favoritesSlice';
 import './Favorites.scss'
@@ -35,11 +35,10 @@ const Favorites = () => {
     if (city) {
       navigate('/weather',
         {
-          state:
-          {
+          state: {
             desireCity: `${city?.countryNameShort}, ${city?.cityName}`,
             cityKey: city?.cityKey
-          }
+          } as GoBackToFavoriteCity
 
         });
     }

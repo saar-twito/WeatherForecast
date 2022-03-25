@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { City, CityInformation, CityWeatherInfo, FiveDaysForecast, TemperatureUnits, CityWeatherState } from "./weather.interfaces";
 
-import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, geCityWeatherInfoByCityKey, getWeatherInfoByUserLocation, getFiveDaysForecast } from "./weatherAPI";
+import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, getCityWeatherInfoByCityKey, getWeatherInfoByUserLocation, getFiveDaysForecast } from "./weatherAPI";
 
 
 const initialState: CityWeatherState = {
@@ -52,7 +52,7 @@ export const requestDefaultCity = createAsyncThunk(
 export const getWeatherByQuery = createAsyncThunk(
   'weather/getWeatherByQuery',
   async (cityKey: string): Promise<CityWeatherInfo[]> => {
-    return await geCityWeatherInfoByCityKey(cityKey)
+    return await getCityWeatherInfoByCityKey(cityKey)
   }
 )
 

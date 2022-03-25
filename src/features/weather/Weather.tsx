@@ -6,48 +6,42 @@ import { showErrorNotification } from '../../shared/toastNotification';
 import { CityWeatherState } from './weather.interfaces';
 import SearchCountry from './SearchCountry/SearchCountry';
 import { useLocation } from 'react-router-dom';
+import { GoBackToFavoriteCity } from '../favorites/favorites.interfaces';
 
 
 // @Component - centralize searching city, user location and weather info
 const Weather = () => {
+  const TEL_AVIV_CITY_KEY = '215854';
 
   const weather: CityWeatherState = useAppSelector((state) => state.weather)
   const dispatch = useAppDispatch();
-  const { state } = useLocation();
+  const { state: routerState } = useLocation() as { state?: GoBackToFavoriteCity };
 
   useEffect(() => {
-    if (state) {
-      // @ts-ignore
-      sendDefaultCity(state.desireCity);
-      // @ts-ignore
-      getFiveDaysForecastForCity(state.cityKey);
+    if (routerState) {
+      sendDefaultCity(routerState.desireCity);
+      getFiveDaysForecastForCity(routerState.cityKey);
+      return;
     }
-    else {
-      // @ts-ignore
-      sendDefaultCity();
-      // @ts-ignore
-      getFiveDaysForecastForCity();
-    }
-
+    sendDefaultCity();
+    getFiveDaysForecastForCity();
   }, [])
 
 
-  const sendDefaultCity = async (desireCity?: string) => {
+  const sendDefaultCity = async (desireCity: string = weather.userQuerySearch) => {
     try {
-      if (desireCity) await dispatch(requestDefaultCity(desireCity.split(',')[1].trim())).unwrap();
-      else await dispatch(requestDefaultCity(weather.userQuerySearch.split(',')[1].trim())).unwrap();
-    
+      // If there is no desired city, use the query search.
+      await dispatch(requestDefaultCity(desireCity.split(',')[1].trim())).unwrap()
+
     } catch (e: any) {
       showErrorNotification(e.message)
     }
   }
 
 
-  const getFiveDaysForecastForCity = async (cityKey?: string) => {
+  const getFiveDaysForecastForCity = async (cityKey: string = weather.cities[0]?.Key || TEL_AVIV_CITY_KEY) => {
     try {
-      if (cityKey) await dispatch(getFiveDays(cityKey)).unwrap();
-      else await dispatch(getFiveDays(weather.cities[0]?.Key || '215854')).unwrap();
-    
+      await dispatch(getFiveDays(cityKey)).unwrap();
     } catch (e: any) {
       showErrorNotification(e.message)
     }
