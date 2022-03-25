@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BiLocationPlus } from 'react-icons/bi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { showErrorNotification, showInfoNotification, showSuccessNotification } from '../../../shared/toastNotification';
@@ -38,7 +38,7 @@ const SearchCountry = () => {
       try {
         await dispatch(getCitiesByQuery(query)).unwrap();
       } catch (e: any) {
-        showErrorNotification(e.message)
+        showErrorNotification(e.message) 
       }
     }
   }
@@ -61,7 +61,6 @@ const SearchCountry = () => {
         await dispatch(getCitiesByQuery(cityInfo.EnglishName)).unwrap();
         await dispatch(getFiveDays(cityInfo.Key)).unwrap();
       } catch (e: any) {
-        console.log("getUserWeatherLocation ~ e", e)
         showErrorNotification(e.message)
       }
     }
