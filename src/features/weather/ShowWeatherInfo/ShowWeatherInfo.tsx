@@ -5,7 +5,6 @@ import { changeTempUnit } from '../weatherSlice';
 import './ShowWeatherInfo.scss'
 
 const ShowInfo = () => {
-
   const weather: CityWeatherState = useAppSelector(state => state.weather);
   const dispatch = useAppDispatch();
 
@@ -82,6 +81,7 @@ const ShowInfo = () => {
         </>
 
         :
+        
         <Spinner />
       }
 

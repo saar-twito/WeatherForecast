@@ -1,9 +1,11 @@
+import { useCallback, useEffect } from 'react';
 import { BiLocationPlus } from 'react-icons/bi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { showErrorNotification, showInfoNotification, showSuccessNotification } from '../../../shared/toastNotification';
 import { FavoriteCity } from '../../favorites/favorites.interfaces';
 import { addCityToFavorite } from '../../favorites/favoritesSlice';
 import { updateUserQuery, updateCityDetails, getWeatherByQuery, getCitiesByQuery, getWeatherByUserLocation, getFiveDays, isUserAskedForItsLocation } from '../weatherSlice';
+import debounce from 'lodash.debounce';
 import './SearchCountry.scss'
 
 // @Component - responsible for searching city and user location.
@@ -11,6 +13,13 @@ const SearchCountry = () => {
 
   const { weather, favorite } = useAppSelector((state) => state)
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    return () => {
+      debouncedChangeHandler.cancel();
+    }
+  }, [])
+  
 
 
   const handleCitiesSearch = async (query: string) => {
@@ -33,6 +42,8 @@ const SearchCountry = () => {
       }
     }
   }
+  
+  const debouncedChangeHandler = debounce(handleCitiesSearch, 500);
 
 
   const isUserGeolocationAvailable = () => {
@@ -50,6 +61,7 @@ const SearchCountry = () => {
         await dispatch(getCitiesByQuery(cityInfo.EnglishName)).unwrap();
         await dispatch(getFiveDays(cityInfo.Key)).unwrap();
       } catch (e: any) {
+        console.log("getUserWeatherLocation ~ e", e)
         showErrorNotification(e.message)
       }
     }
@@ -76,13 +88,12 @@ const SearchCountry = () => {
 
   return (
     <div className="search-location-wrapper">
-      {console.log(weather)}
       <div className='search-location'>
         <input
           list="countries"
           type='text'
           className="search-input-by-city"
-          onChange={(e) => handleCitiesSearch(e.target.value)}
+          onChange={(e) => debouncedChangeHandler(e.target.value)}
           placeholder="Search by city name" />
 
         <datalist id="countries">

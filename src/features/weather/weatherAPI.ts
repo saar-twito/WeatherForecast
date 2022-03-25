@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { City, CityInformation, CityWeatherInfo, FiveDaysForecast } from "./weather.interfaces";
 
 
 const api = {
   baseURL: 'http://dataservice.accuweather.com/',
-  privateAPIKey: 'bBy6WnN10cnDp6ivpg0DOzBHARNcIJWm'
+  privateAPIKey: 'qzi2WAte5foZTx8h4H9oG3ZdsG4RcfGp'
 };
 
 
@@ -15,6 +15,8 @@ export const getCitiesByQueryAPI = async (city: string): Promise<City[]> => {
     const cities: City[] = await (await axios.get(`${api.baseURL}locations/v1/cities/autocomplete?apikey=${api.privateAPIKey}&q=${city}`)).data;
     return cities
   } catch (error) {
+    const err = error as AxiosError
+    console.log("getWeatherInfoByUserLocation ~ error", err)
     throw new Error("City not found");
   }
 }
@@ -22,7 +24,6 @@ export const getCitiesByQueryAPI = async (city: string): Promise<City[]> => {
 
 // Get the weather info of default city (Tel Aviv)
 export const getDefaultCityWeatherAPI = async (defaultCity: string): Promise<{ cities: City[]; cityWeatherData: CityWeatherInfo[]; }> => {
-console.log("getDefaultCityWeatherAPI ~ defaultCity", defaultCity)
   try {
     const cities: City[] = await getCitiesByQueryAPI(defaultCity);
     const cityWeatherData: CityWeatherInfo[] = await geCityWeatherInfoByCityKey(cities[0].Key);
@@ -31,6 +32,8 @@ console.log("getDefaultCityWeatherAPI ~ defaultCity", defaultCity)
       cityWeatherData
     };
   } catch (error) {
+    const err = error as AxiosError
+    console.log("getWeatherInfoByUserLocation ~ error", err.code)
     throw new Error("City weather info is not available A");
   }
 }
@@ -42,6 +45,8 @@ export const geCityWeatherInfoByCityKey = async (cityKey: string): Promise<CityW
     const cityWeatherInfo: CityWeatherInfo[] = await (await axios.get(`${api.baseURL}currentconditions/v1/${cityKey}?apikey=${api.privateAPIKey}`)).data;
     return cityWeatherInfo
   } catch (error) {
+    const err = error as AxiosError
+    console.log("getWeatherInfoByUserLocation ~ error", err)
     throw new Error("City weather info is not available B");
   }
 }
@@ -52,6 +57,8 @@ export const getFiveDaysForecast = async (cityKey: string): Promise<FiveDaysFore
     const fiveDaysForecast: FiveDaysForecast = await (await axios.get(`${api.baseURL}forecasts/v1/daily/5day/${cityKey}?apikey=${api.privateAPIKey}`)).data
     return fiveDaysForecast
   } catch (error) {
+    const err = error as AxiosError
+    console.log("getWeatherInfoByUserLocation ~ error", err)
     throw new Error("Weather forecasts is not available B");
   }
 
@@ -67,6 +74,8 @@ export const getWeatherInfoByUserLocation = async (latitude: number, longitude: 
       cityInfo
     }
   } catch (error) {
+    const err = error as AxiosError
+    console.log("getWeatherInfoByUserLocation ~ error", err)
     throw new Error("User location not found");
   }
 }

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { FavoritesCitiesState } from './favorites.interfaces';
 import { MdDeleteOutline } from "react-icons/md";
@@ -31,7 +31,6 @@ const Favorites = () => {
 
 
   const handleShowCity = (cityKey: string) => {
-    console.log("handleShowCity ~ cityKey", cityKey)
     const city = favoriteCities.find(city => city.cityKey === cityKey);
     if (city) {
       navigate('/weather',
