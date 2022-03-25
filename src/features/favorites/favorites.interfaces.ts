@@ -9,6 +9,14 @@ export interface FavoriteCity {
   description: string;
 }
 
+
+export interface GoBackToFavoriteCity {
+  desireCity: string;
+  cityKey: string;
+}
+
+
+
 export interface FavoritesCitiesState {
   favoriteCities: FavoriteCity[]
 }

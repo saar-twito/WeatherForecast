@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { FavoritesCitiesState } from './favorites.interfaces';
@@ -11,16 +11,39 @@ const Favorites = () => {
 
   const { favoriteCities }: FavoritesCitiesState = useAppSelector((state) => state.favorite)
   const dispatch = useAppDispatch();
-  
+
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!favoriteCities.length) navigate('/weather');
+  }, [])
+
 
   const removeCity = (cityKey: string) => {
     if (favoriteCities.length === 1) {
       dispatch(removeCityFromFavorite(cityKey));
       navigate('/weather');
     }
-    
+    else {
+      dispatch(removeCityFromFavorite(cityKey));
+    }
+  }
 
+
+  const handleShowCity = (cityKey: string) => {
+    console.log("handleShowCity ~ cityKey", cityKey)
+    const city = favoriteCities.find(city => city.cityKey === cityKey);
+    if (city) {
+      navigate('/weather',
+        {
+          state:
+          {
+            desireCity: `${city?.countryNameShort}, ${city?.cityName}`,
+            cityKey: city?.cityKey
+          }
+
+        });
+    }
   }
 
   return (
@@ -31,14 +54,17 @@ const Favorites = () => {
             <div className="card-body">
               <header>
                 <div>
-                  <h5 className="card-title">{city.cityName}, {city.countryNameShort}</h5>
+                  <h5 className="card-title">{city.countryNameShort}, {city.cityName}</h5>
                   <h6 className="card-subtitle mb-2 text-muted">{city.cityWeatherInfo.WeatherText}</h6>
                 </div>
-                <p className="card-title">{city.cityWeatherInfo.Temperature.Metric.Value}</p>
+                <div>
+                  <p className="card-title">{city.cityWeatherInfo.Temperature.Metric.Value}&#x2103;</p>
+                  <p className="card-title">{city.cityWeatherInfo.Temperature.Imperial.Value}&#x2109;</p>
+                </div>
               </header>
               <p className="card-text">{city.description}</p>
               <footer>
-                <Link className="card-link" to="/weather">Show 5 days forecast</Link>
+                <a onClick={() => handleShowCity(city.cityKey)} className="card-link">Show 5 days forecast</a>
                 <MdDeleteOutline onClick={() => removeCity(city.cityKey)} />
               </footer>
             </div>

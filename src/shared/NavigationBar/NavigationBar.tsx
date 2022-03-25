@@ -2,18 +2,16 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { FavoritesCitiesState } from '../../features/favorites/favorites.interfaces';
-import { showErrorNotification } from '../toastNotification';
+import { showInfoNotification } from '../toastNotification';
 
 
 const NavigationBar = () => {
   const { favoriteCities }: FavoritesCitiesState = useAppSelector((state) => state.favorite)
 
-  const navigate = useNavigate()
-
-  const handleFavoriteNavigation = () => {
+  const handleFavoriteNavigation = (e: any) => {
     if (!favoriteCities.length) {
-      showErrorNotification('Favorite cities is empty, Please add a city to favorites', 3000)
-      setTimeout(() => navigate('/weather'), 3000);
+      showInfoNotification('Favorite cities are empty. Please add a city to favorites.', 3000)
+      e.preventDefault()
     }
   }
 
@@ -31,7 +29,7 @@ const NavigationBar = () => {
                 <NavLink className="nav-link" to="/weather">Weather</NavLink>
               </li>
               <li className="nav-item">
-                <NavLink onClick={() => handleFavoriteNavigation()} className="nav-link" to="/favorites">Favorites</NavLink>
+                <NavLink onClick={(e) => handleFavoriteNavigation(e)} className="nav-link" to="/favorites">Favorites</NavLink>
               </li>
             </ul>
           </div>

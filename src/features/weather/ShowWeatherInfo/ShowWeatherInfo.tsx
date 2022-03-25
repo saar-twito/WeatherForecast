@@ -38,7 +38,7 @@ const ShowInfo = () => {
 
               {/* City and current city's temperature */}
               <div className="info">
-                <h1>{weather.cityName}, {weather.countryNameShort}</h1>
+                <h1>{weather.countryNameShort}, {weather.cityName}</h1>
                 <p>{weather.cityWeatherInfo?.WeatherText}</p>
               </div>
 

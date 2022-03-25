@@ -12,7 +12,7 @@ const initialState: CityWeatherState = {
     },
     DailyForecasts: [],
   },
-  userQuerySearch: "Tel Aviv",
+  userQuerySearch: "IL, Tel Aviv",
   cityName: "",
   temperatureUnit: TemperatureUnits.CELSIUS,
   countryNameShort: "",
@@ -123,7 +123,7 @@ export const weatherSlice = createSlice({
         state.cityWeatherInfo.WeatherText = cityWeatherData[0].WeatherText;
         state.cityWeatherInfo.Temperature.Metric = cityWeatherData[0].Temperature.Metric;
         state.cityWeatherInfo.Temperature.Imperial = cityWeatherData[0].Temperature.Imperial;
-        state.cityName = cities[0].AdministrativeArea.LocalizedName;
+        state.cityName = cities[0].LocalizedName;
         state.countryNameShort = cities[0].Country.ID;
       })
 
@@ -136,6 +136,7 @@ export const weatherSlice = createSlice({
         state.cityWeatherInfo.Temperature = cityWeatherInfo[0].Temperature;
         state.cityName = cityInfo.EnglishName;
         state.countryNameShort = cityInfo.AdministrativeArea.CountryID;
+        state.userQuerySearch = `${state.countryNameShort}, ${state.cityName}`
       })
 
 

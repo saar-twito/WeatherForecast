@@ -4,7 +4,7 @@ import { City, CityInformation, CityWeatherInfo, FiveDaysForecast } from "./weat
 
 const api = {
   baseURL: 'http://dataservice.accuweather.com/',
-  privateAPIKey: '3KYF6eOBtg3INqeTA0glvSqNZ7aqsQ42'
+  privateAPIKey: 'bBy6WnN10cnDp6ivpg0DOzBHARNcIJWm'
 };
 
 
@@ -22,6 +22,7 @@ export const getCitiesByQueryAPI = async (city: string): Promise<City[]> => {
 
 // Get the weather info of default city (Tel Aviv)
 export const getDefaultCityWeatherAPI = async (defaultCity: string): Promise<{ cities: City[]; cityWeatherData: CityWeatherInfo[]; }> => {
+console.log("getDefaultCityWeatherAPI ~ defaultCity", defaultCity)
   try {
     const cities: City[] = await getCitiesByQueryAPI(defaultCity);
     const cityWeatherData: CityWeatherInfo[] = await geCityWeatherInfoByCityKey(cities[0].Key);

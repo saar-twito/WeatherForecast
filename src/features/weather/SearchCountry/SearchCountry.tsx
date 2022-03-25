@@ -13,7 +13,7 @@ const SearchCountry = () => {
   const dispatch = useAppDispatch();
 
 
-  const handleCitiesListSearch = async (query: string) => {
+  const handleCitiesSearch = async (query: string) => {
     dispatch(updateUserQuery(query))
     const city = weather.cities.find(c => `${c.Country.ID}, ${c.LocalizedName}` === query)
     if (city) {
@@ -39,13 +39,15 @@ const SearchCountry = () => {
 
     // Check if geolocation available
     if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getUserWeatherLocation);
-    else showInfoNotification('location share is not supported by this browser.', 3000)
+    else showInfoNotification('This browser does not support location share.', 3000)
 
     // Get user location coordinates
     async function getUserWeatherLocation(position: GeolocationPosition) {
       dispatch(isUserAskedForItsLocation())
+
       try {
         const { cityInfo } = await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
+        await dispatch(getCitiesByQuery(cityInfo.EnglishName)).unwrap();
         await dispatch(getFiveDays(cityInfo.Key)).unwrap();
       } catch (e: any) {
         showErrorNotification(e.message)
@@ -56,7 +58,7 @@ const SearchCountry = () => {
   const handleFavoriteCity = () => {
     const { cities, cityName, countryNameShort, cityWeatherInfo, fiveDaysForecast } = weather;
     if (favorite.favoriteCities.find(c => c.cityKey === cities[0].Key)) {
-      showInfoNotification(`${cityName} already added to favorites list`, 3000)
+      showInfoNotification(`${cityName} already added to favorites cities`, 3000)
     }
     else {
       const cityToFavorite: FavoriteCity = {
@@ -68,19 +70,19 @@ const SearchCountry = () => {
         description: fiveDaysForecast.Headline.Text
       }
       dispatch(addCityToFavorite(cityToFavorite))
-      showSuccessNotification(`${cityName} was added to favorites list`, 3000)
+      showSuccessNotification(`${cityName} was added to favorites cities`, 3000)
     }
   }
 
   return (
     <div className="search-location-wrapper">
-      
+      {console.log(weather)}
       <div className='search-location'>
         <input
           list="countries"
           type='text'
           className="search-input-by-city"
-          onChange={(e) => handleCitiesListSearch(e.target.value)}
+          onChange={(e) => handleCitiesSearch(e.target.value)}
           placeholder="Search by city name" />
 
         <datalist id="countries">
@@ -107,11 +109,11 @@ const SearchCountry = () => {
       </div>
 
       <div className="search-and-save-buttons-wrapper">
-        
+
         <button
           type="button"
           className="search"
-          onClick={() => handleCitiesListSearch(weather.userQuerySearch)}>
+          onClick={() => handleCitiesSearch(weather.userQuerySearch)}>
           Search
         </button>
 

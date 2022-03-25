@@ -5,6 +5,7 @@ import { requestDefaultCity, getFiveDays } from './weatherSlice';
 import { showErrorNotification } from '../../shared/toastNotification';
 import { CityWeatherState } from './weather.interfaces';
 import SearchCountry from './SearchCountry/SearchCountry';
+import { useLocation } from 'react-router-dom';
 
 
 // @Component - centralize searching city, user location and weather info
@@ -12,26 +13,41 @@ const Weather = () => {
 
   const weather: CityWeatherState = useAppSelector((state) => state.weather)
   const dispatch = useAppDispatch();
-
+  const { state } = useLocation();
 
   useEffect(() => {
-    sendDefaultCity()
-    getFiveDaysForecastForCity()
+    if (state) {
+      // @ts-ignore
+      sendDefaultCity(state.desireCity);
+      // @ts-ignore
+      getFiveDaysForecastForCity(state.cityKey);
+    }
+    else {
+      // @ts-ignore
+      sendDefaultCity();
+      // @ts-ignore
+      getFiveDaysForecastForCity();
+    }
+
   }, [])
 
 
-  const sendDefaultCity = async () => {
+  const sendDefaultCity = async (desireCity?: string) => {
     try {
-      await dispatch(requestDefaultCity(weather.userQuerySearch)).unwrap();
+      if (desireCity) await dispatch(requestDefaultCity(desireCity.split(',')[1].trim())).unwrap();
+      else await dispatch(requestDefaultCity(weather.userQuerySearch.split(',')[1].trim())).unwrap();
+    
     } catch (e: any) {
       showErrorNotification(e.message)
     }
   }
 
 
-  const getFiveDaysForecastForCity = async () => {
+  const getFiveDaysForecastForCity = async (cityKey?: string) => {
     try {
-      await dispatch(getFiveDays(weather.cities[0]?.Key || '215854')).unwrap();
+      if (cityKey) await dispatch(getFiveDays(cityKey)).unwrap();
+      else await dispatch(getFiveDays(weather.cities[0]?.Key || '215854')).unwrap();
+    
     } catch (e: any) {
       showErrorNotification(e.message)
     }
