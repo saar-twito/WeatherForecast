@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { FavoritesCitiesState } from './favorites.interfaces';
 import { MdDeleteOutline } from "react-icons/md";
-import './Favorites.scss'
 import { removeCityFromFavorite } from './favoritesSlice';
+import './Favorites.scss'
 
 
 const Favorites = () => {
