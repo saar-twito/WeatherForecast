@@ -45,29 +45,27 @@ const FavoritesCities = () => {
 
   return (
     <div className="favorites-cities-wrapper">
-      {favoriteCities.map((city) => {
-        return (
-          <div key={city.cityKey} className="card">
-            <div className="card-body">
-              <header>
-                <div>
-                  <h5 className="card-title">{city.countryNameShort}, {city.cityName}</h5>
-                  <h6 className="card-subtitle mb-2 text-muted">{city.cityWeatherInfo.WeatherText}</h6>
-                </div>
-                <div>
-                  <p className="card-title">{city.cityWeatherInfo.Temperature.Metric.Value}&#x2103;</p>
-                  <p className="card-title">{city.cityWeatherInfo.Temperature.Imperial.Value}&#x2109;</p>
-                </div>
-              </header>
-              <p className="card-text">{city.description}</p>
-              <footer>
-                <button onClick={() => handleClickOnFiveDaysForecast(city.cityKey)} className="card-link">Show 5 days forecast</button>
-                <MdDeleteOutline onClick={() => removeCityFromFavoriteCities(city.cityKey)} />
-              </footer>
-            </div>
+      {favoriteCities.map((city) => (
+        <div key={city.cityKey} className="card">
+          <div className="card-body">
+            <header>
+              <div>
+                <h5 className="card-title">{city.countryNameShort}, {city.cityName}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">{city.cityWeatherInfo.WeatherText}</h6>
+              </div>
+              <div>
+                <p className="card-title">{city.cityWeatherInfo.Temperature.Metric.Value}&#x2103;</p>
+                <p className="card-title">{city.cityWeatherInfo.Temperature.Imperial.Value}&#x2109;</p>
+              </div>
+            </header>
+            <p className="card-text">{city.description}</p>
+            <footer>
+              <button onClick={() => handleClickOnFiveDaysForecast(city.cityKey)} className="card-link">Show 5 days forecast</button>
+              <MdDeleteOutline onClick={() => removeCityFromFavoriteCities(city.cityKey)} />
+            </footer>
           </div>
-        )
-      })}
+        </div>
+      ))}
     </div>
   )
 }
