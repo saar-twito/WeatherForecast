@@ -1,4 +1,3 @@
-
 /* BASIC SETUP */
 *,
 *::before,
@@ -34,13 +33,38 @@ body {
 }
 
 .App {
-    height: 100vh;
     font-family: "Inter", sans-serif;
     &.sunny {
         background-image: linear-gradient(to top, #e1ee4e, #97ed7c, #51e5a9, #0cd8cc, #3ec6da);
     }
 
     &.cold {
-        background-image: linear-gradient(to top, #ffffff, #7ea0ff, #6672bf, #294578, #1d2a42);
+        background-image: linear-gradient(
+            to bottom,
+            #6d8ada,
+            #6c85d5,
+            #6b81d0,
+            #697ccb,
+            #6878c6,
+            #6272be,
+            #5c6db5,
+            #5667ad,
+            #4a5ea0,
+            #3f5692,
+            #344d85,
+            #294578
+        );
+    }
+}
+
+@media only screen and (max-width: 3000px) {
+    .App {
+        height: 100vh;
+    }
+}
+
+@media only screen and (max-width: 455px) {
+    .App {
+        height: 110vh;
     }
 }

@@ -52,6 +52,18 @@ export interface CityInformation {
 
 export interface ForecastDay {
   Date: string,
+  Day: {
+    Icon: number,
+    IconPhrase: string,
+    HasPrecipitation: boolean
+    PrecipitationType?: string,
+  }
+  Night: {
+    Icon: number,
+    IconPhrase: string,
+    HasPrecipitation: boolean,
+    PrecipitationType?: string,
+  }
   Temperature: {
     Minimum: {
       Value: number,
