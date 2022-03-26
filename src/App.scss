@@ -35,6 +35,7 @@ body {
 .App {
     font-family: "Inter", sans-serif;
     transition: all 0.5s;
+    min-height: 100vh;
     background-image: linear-gradient(
         to bottom,
         #6d8ada,
@@ -50,16 +51,4 @@ body {
         #344d85,
         #294578
     );
-}
-
-@media only screen and (max-width: 3000px) {
-    .App {
-        height: 100vh;
-    }
-}
-
-@media only screen and (max-width: 455px) {
-    .App {
-        height: 128vh;
-    }
 }

@@ -1,7 +1,20 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CityGeneralInfo, CityInformation, CityWeatherInfo, FiveDaysCityForecast, TemperatureUnits, CityWeatherState } from "./weather.interfaces";
+import {
+  CityGeneralInfo,
+  CityInformation,
+  CityWeatherInfo,
+  FiveDaysCityForecast,
+  TemperatureUnits,
+  CityWeatherState
+} from "./weather.interfaces";
 
-import { getCitiesAutocompleteAPI, getCityWeatherAPI, getCityWeatherInfoByCityKeyAPI, getWeatherInfoByUserLocationAPI, getFiveDaysForecastAPI } from "./weatherAPI";
+import {
+  getCitiesAutocompleteAPI,
+  getCityWeatherAPI,
+  getCityWeatherInfoByCityKeyAPI,
+  getWeatherInfoByUserLocationAPI,
+  getFiveDaysForecastAPI
+} from "./weatherAPI";
 
 
 const initialState: CityWeatherState = {

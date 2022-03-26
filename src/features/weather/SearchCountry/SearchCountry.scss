@@ -39,13 +39,13 @@
     .search-error {
       width: -webkit-fill-available;
 
-      .alert{
+      .alert {
         padding: 0.5rem 0.5rem;
       }
     }
 
     .my-location {
-      @include searchAndUserLocationButtons(#0B5ED7);
+      @include searchAndUserLocationButtons(#0b5ed7);
       display: flex;
       width: 133px;
 

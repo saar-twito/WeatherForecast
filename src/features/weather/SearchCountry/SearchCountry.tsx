@@ -126,18 +126,16 @@ const SearchCountry = () => {
         </datalist>
 
 
-        {weather.isUserAskedForItsLocation ?
-
-          <button className="btn btn-primary" type="button" disabled>
-            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Loading...
-          </button>
-
-          :
-
-          <button type='button' className="my-location" onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="user-location" />
-            My Location
-          </button>
+        {
+          weather.isUserAskedForItsLocation ?
+            <button className="btn btn-primary" type="button" disabled>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+            :
+            <button type='button' className="my-location" onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="user-location" />
+              My Location
+            </button>
         }
       </div>
 

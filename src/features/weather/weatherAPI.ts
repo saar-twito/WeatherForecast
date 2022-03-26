@@ -3,7 +3,7 @@ import { CityGeneralInfo, CityInformation, CityWeatherInfo, FiveDaysCityForecast
 
 
 const axiosInstance = axios.create({
-  baseURL: 'http://dataservice.accuweather.com/',
+  baseURL: 'https://dataservice.accuweather.com/',
   params: {
     apikey: process.env.REACT_APP_ACCUWEATHER_KEY
   },
@@ -60,7 +60,7 @@ export const getFiveDaysForecastAPI = async (cityKey: string): Promise<FiveDaysC
 // Get the weather info base on user's location'
 export const getWeatherInfoByUserLocationAPI = async (latitude: number, longitude: number): Promise<{ cityWeatherInfo: CityWeatherInfo[]; cityInfo: CityInformation; }> => {
   try {
-    const cityInfo: CityInformation = (await axiosInstance.get(`locations/v1/cities/geoposition/search`, {params: {q: `${latitude},${longitude}`}})).data;
+    const cityInfo: CityInformation = (await axiosInstance.get(`locations/v1/cities/geoposition/search`, { params: { q: `${latitude},${longitude}` } })).data;
     const cityWeatherInfo: CityWeatherInfo[] = await getCityWeatherInfoByCityKeyAPI(cityInfo.Key);
     return {
       cityWeatherInfo,
