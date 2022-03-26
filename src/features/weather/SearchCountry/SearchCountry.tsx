@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BiLocationPlus, BiPlus } from 'react-icons/bi';
+import { BiLocationPlus } from 'react-icons/bi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { showErrorNotification, showInfoNotification, showSuccessNotification } from '../../../shared/toastNotification';
 import { FavoriteCity } from '../../favorites/favorites.interfaces';
@@ -105,6 +105,7 @@ const SearchCountry = () => {
 
   return (
     <div className="search-location-wrapper">
+
       <div className='search-location'>
         <input
           list="countries"
@@ -154,8 +155,7 @@ const SearchCountry = () => {
       <button
         type="button"
         className="save"
-        onClick={() => handleAddingCityToFavorite()}>
-        <BiPlus /> Save
+        onClick={() => handleAddingCityToFavorite()}>Save
       </button>
 
 

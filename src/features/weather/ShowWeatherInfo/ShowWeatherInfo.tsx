@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { CityWeatherState, ForecastDay, TemperatureUnits } from '../weather.interfaces';
 import { changeTemperatureUnit } from '../weatherSlice';
-import { WiMoonAltNew, WiCloudy, WiRainWind, WiCloudyWindy, WiCloud, WiDayCloudy, WiThunderstorm, WiDaySunny, WiNightClear } from "react-icons/wi";
+import { WiMoonAltNew, WiRainWind, WiDayHaze, WiCloudyWindy, WiCloud, WiDayCloudy, WiThunderstorm, WiNightClear } from "react-icons/wi";
 import './ShowWeatherInfo.scss'
 
 const ShowWeatherInfo = () => {
@@ -33,65 +33,74 @@ const ShowWeatherInfo = () => {
 
   const getWeatherIcon = (day: ForecastDay) => {
     const iconSize = 30;
+    const iconColor = "gray"
     let dayTime: any;
     let nightTime: any;
 
     if (day.Day.HasPrecipitation) {
-      if (day.Day.IconPhrase.includes('storms')) dayTime = <WiThunderstorm color='gray' size={30} />
-      else dayTime = <WiRainWind color='gray' size={30} />
+      if (day.Day.IconPhrase.includes('storms')) dayTime = <WiThunderstorm color={iconColor} size={iconSize} />
+      else dayTime = <WiRainWind color={iconColor} size={iconSize} />
     }
     else {
       switch (day.Day.IconPhrase) {
         case "Sunny":
         case "Mostly sunny":
-          dayTime = <WiDaySunny size={30} />
+          dayTime = <WiMoonAltNew color='#ffec07' size={iconSize} />
           break;
 
         case "Mostly clear":
         case "Clear":
-          dayTime = <WiNightClear color='gray' size={30} />
+          dayTime = <WiNightClear color={iconColor} size={iconSize} />
           break;
 
         case "Partly cloudy":
-          dayTime = <WiDayCloudy color='gray' size={30} />
+          dayTime = <WiDayCloudy color={iconColor} size={iconSize} />
           break;
 
         case "Intermittent clouds":
         case "Cloudy":
         case "Mostly cloudy":
-          dayTime = <WiCloudyWindy color='gray' size={30} />
+          dayTime = <WiCloudyWindy color={iconColor} size={iconSize} />
+          break;
+
+        case "Hazy sunshine":
+          dayTime = <WiDayHaze color={iconColor} size={iconSize} />
           break;
 
         case "Dreary":
-          dayTime = <WiCloud color='gray' size={30} />
+          dayTime = <WiCloud color={iconColor} size={iconSize} />
           break;
       }
     }
 
 
     if (day.Night.HasPrecipitation) {
-      if (day.Night.IconPhrase.includes('storms')) nightTime = <WiThunderstorm color='gray' size={30} />
-      else nightTime = <WiRainWind color='gray' size={30} />
+      if (day.Night.IconPhrase.includes('storms')) nightTime = <WiThunderstorm color={iconColor} size={iconSize} />
+      else nightTime = <WiRainWind color={iconColor} size={iconSize} />
     }
     else {
       switch (day.Night.IconPhrase) {
         case "Mostly clear":
         case "Clear":
-          nightTime = <WiNightClear color='gray' size={30} />
+          nightTime = <WiNightClear color={iconColor} size={iconSize} />
           break;
 
         case "Partly cloudy":
-          nightTime = <WiDayCloudy color='gray' size={30} />
+          nightTime = <WiDayCloudy color={iconColor} size={iconSize} />
           break;
 
         case "Intermittent clouds":
         case "Cloudy":
         case "Mostly cloudy":
-          nightTime = <WiCloudyWindy color='gray' size={30} />
+          nightTime = <WiCloudyWindy color={iconColor} size={iconSize} />
+          break;
+
+        case "Hazy sunshine":
+          nightTime = <WiDayHaze color={iconColor} size={iconSize} />
           break;
 
         case "Dreary":
-          nightTime = <WiCloud color='gray' size={30} />
+          nightTime = <WiCloud color={iconColor} size={iconSize} />
           break;
       }
     }
