@@ -1,8 +1,8 @@
 
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { FavoritesCitiesState } from '../../features/favorites/favorites.interfaces';
-import { showInfoNotification } from '../toastNotification';
+import { showInfoNotification } from '../../shared/toastNotification';
 
 
 const NavigationBar = () => {
@@ -20,7 +20,14 @@ const NavigationBar = () => {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <NavLink className="navbar-brand" to="/">Herolo weather app</NavLink>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">

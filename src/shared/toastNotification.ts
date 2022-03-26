@@ -1,10 +1,6 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// interface toastOptions {
-//   message: string, 
-//   time:number,
-// }
 
 export const showErrorNotification = (message: string, time: number = 2000) => {
   toast.error(message, {

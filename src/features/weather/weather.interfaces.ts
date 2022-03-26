@@ -5,7 +5,7 @@ export enum TemperatureUnits {
 
 
 // When i search for city.
-export interface City {
+export interface CityGeneralInfo {
   Version: number,
   Key: string,
   Type: string,
@@ -67,7 +67,7 @@ export interface Day {
 }
 
 
-export interface FiveDaysForecast {
+export interface FiveDaysCityForecast {
   Headline: {
     Text: string,
   },
@@ -77,8 +77,8 @@ export interface FiveDaysForecast {
 
 
 export interface CityWeatherState {
-  cities: City[];
-  fiveDaysForecast: FiveDaysForecast;
+  cities: CityGeneralInfo[];
+  fiveDaysForecast: FiveDaysCityForecast;
   userQuerySearch: string;
   temperatureUnit: TemperatureUnits;
   cityName: string;

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { City, CityInformation, CityWeatherInfo, FiveDaysForecast, TemperatureUnits, CityWeatherState } from "./weather.interfaces";
+import { CityGeneralInfo, CityInformation, CityWeatherInfo, FiveDaysCityForecast, TemperatureUnits, CityWeatherState } from "./weather.interfaces";
 
-import { getCitiesByQueryAPI, getDefaultCityWeatherAPI, getCityWeatherInfoByCityKey, getWeatherInfoByUserLocation, getFiveDaysForecast } from "./weatherAPI";
+import { getCitiesAutocompleteAPI, getCityWeatherAPI, getCityWeatherInfoByCityKeyAPI, getWeatherInfoByUserLocationAPI, getFiveDaysForecastAPI } from "./weatherAPI";
 
 
 const initialState: CityWeatherState = {
@@ -35,39 +35,39 @@ const initialState: CityWeatherState = {
 };
 
 
-export const getCitiesByQuery = createAsyncThunk(
-  'weather/getCitiesByQuery',
-  async (location: string): Promise<City[]> => {
-    return await getCitiesByQueryAPI(location)
+export const getCitiesAutocomplete = createAsyncThunk(
+  'weather/getCitiesAutocomplete',
+  async (location: string): Promise<CityGeneralInfo[]> => {
+    return await getCitiesAutocompleteAPI(location)
   }
 )
 
-export const requestDefaultCity = createAsyncThunk(
-  'weather/requestDefaultCity',
-  async (defaultCity: string): Promise<{ cities: City[]; cityWeatherData: CityWeatherInfo[]; }> => {
-    return await getDefaultCityWeatherAPI(defaultCity)
+export const getCityWeatherInfo = createAsyncThunk(
+  'weather/getCityWeatherInfo',
+  async (defaultCity: string): Promise<{ cities: CityGeneralInfo[]; cityWeatherData: CityWeatherInfo[]; }> => {
+    return await getCityWeatherAPI(defaultCity)
   }
 )
 
-export const getWeatherByQuery = createAsyncThunk(
-  'weather/getWeatherByQuery',
+export const getCityWeatherInfoByCityKey = createAsyncThunk(
+  'weather/getCityWeatherInfoByCityKey',
   async (cityKey: string): Promise<CityWeatherInfo[]> => {
-    return await getCityWeatherInfoByCityKey(cityKey)
+    return await getCityWeatherInfoByCityKeyAPI(cityKey)
   }
 )
 
 
-export const getFiveDays = createAsyncThunk(
-  'weather/getFiveDays',
-  async (cityKey: string): Promise<FiveDaysForecast> => {
-    return await getFiveDaysForecast(cityKey)
+export const getFiveDaysWeatherForecast = createAsyncThunk(
+  'weather/getFiveDaysWeatherForecast',
+  async (cityKey: string): Promise<FiveDaysCityForecast> => {
+    return await getFiveDaysForecastAPI(cityKey)
   }
 )
 
-export const getWeatherByUserLocation = createAsyncThunk(
-  'weather/getWeatherDataByUserLocation',
+export const getWeatherInfoByUserLocation = createAsyncThunk(
+  'weather/getWeatherInfoByUserLocation',
   async (coordinates: { latitude: number, longitude: number }): Promise<{ cityWeatherInfo: CityWeatherInfo[]; cityInfo: CityInformation; }> => {
-    return await getWeatherInfoByUserLocation(coordinates.latitude, coordinates.longitude);
+    return await getWeatherInfoByUserLocationAPI(coordinates.latitude, coordinates.longitude);
   }
 )
 
@@ -75,9 +75,11 @@ export const weatherSlice = createSlice({
   name: 'weather',
   initialState,
   reducers: {
-    updateUserQuery: (state, { payload }: PayloadAction<string>) => { state.userQuerySearch = payload },
+    updateUserQuery: (state, { payload }: PayloadAction<string>) => {
+      state.userQuerySearch = payload
+    },
 
-    changeTempUnit: (state) => {
+    changeTemperatureUnit: (state) => {
       const { temperatureUnit } = state
       const tempObj = state.cityWeatherInfo.Temperature
 
@@ -99,7 +101,8 @@ export const weatherSlice = createSlice({
         }
       }
     },
-    updateCityDetails: (state, { payload }: PayloadAction<City>) => {
+
+    updateCityGeneralInfo: (state, { payload }: PayloadAction<CityGeneralInfo>) => {
       state.cityName = payload.LocalizedName;
       state.countryNameShort = payload.Country.ID;
     },
@@ -110,14 +113,14 @@ export const weatherSlice = createSlice({
   extraReducers: (builder) => {
 
     builder
-      /* Get cities by query */
-      .addCase(getCitiesByQuery.fulfilled, (state, { payload }) => {
+      /* Get cities by autocomplete */
+      .addCase(getCitiesAutocomplete.fulfilled, (state, { payload }) => {
         state.cities = [...payload];
       })
 
 
-      /* Get default city weather */
-      .addCase(requestDefaultCity.fulfilled, (state, { payload }) => {
+      /* Get city weather info */
+      .addCase(getCityWeatherInfo.fulfilled, (state, { payload }) => {
         const { cities, cityWeatherData } = payload;
         state.cities = [...cities];
         state.cityWeatherInfo.WeatherText = cityWeatherData[0].WeatherText;
@@ -127,27 +130,30 @@ export const weatherSlice = createSlice({
         state.countryNameShort = cities[0].Country.ID;
       })
 
-      .addCase(getWeatherByUserLocation.rejected, (state) => {
+      /* /* Get user location city weather info */
+      .addCase(getWeatherInfoByUserLocation.rejected, (state) => {
         state.isUserAskedForItsLocation = false;
       })
-      .addCase(getWeatherByUserLocation.fulfilled, (state, { payload }) => {
+      .addCase(getWeatherInfoByUserLocation.fulfilled, (state, { payload }) => {
         state.isUserAskedForItsLocation = false;
         const { cityWeatherInfo, cityInfo } = payload;
         state.cityWeatherInfo.Temperature = cityWeatherInfo[0].Temperature;
+        state.cityWeatherInfo.WeatherText = cityWeatherInfo[0].WeatherText;
         state.cityName = cityInfo.EnglishName;
         state.countryNameShort = cityInfo.AdministrativeArea.CountryID;
         state.userQuerySearch = `${state.countryNameShort}, ${state.cityName}`
       })
 
 
-      .addCase(getWeatherByQuery.fulfilled, (state, { payload }) => {
+      /* Get city weather info by city key */
+      .addCase(getCityWeatherInfoByCityKey.fulfilled, (state, { payload }) => {
         state.cityWeatherInfo.WeatherText = payload[0].WeatherText;
         state.cityWeatherInfo.Temperature.Metric = payload[0].Temperature.Metric;
         state.cityWeatherInfo.Temperature.Imperial = payload[0].Temperature.Imperial;
       })
 
-
-      .addCase(getFiveDays.fulfilled, (state, { payload }) => {
+      /* Get 5 days weather forecast */
+      .addCase(getFiveDaysWeatherForecast.fulfilled, (state, { payload }) => {
         state.fiveDaysForecast.Headline.Text = payload.Headline.Text
         state.fiveDaysForecast.DailyForecasts = [...payload.DailyForecasts]
       })
@@ -155,6 +161,6 @@ export const weatherSlice = createSlice({
   }
 });
 
-export const { updateUserQuery, changeTempUnit, updateCityDetails, isUserAskedForItsLocation } = weatherSlice.actions;
+export const { updateUserQuery, changeTemperatureUnit, updateCityGeneralInfo, isUserAskedForItsLocation } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

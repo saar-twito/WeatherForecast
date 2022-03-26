@@ -1,0 +1,31 @@
+.page-not-found {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 200px;
+  color: aliceblue;
+
+  :nth-child(1) {
+    font-size: 34px;
+  }
+
+  :nth-child(2) {
+    font-size: 18px;
+  }
+
+  :nth-child(3) {
+    color: aliceblue;
+    text-decoration: none;
+    background-color: #efb943;
+    padding: 15px;
+    border-radius: 39px;
+    font-size: 20px;
+    transition: background-color 0.2s;
+    box-shadow: #11111a0d 0px 4px 16px, #11111a0d 0px 8px 32px;
+
+    &:hover {
+      background-color: darken($color: #efb943, $amount: 5%);
+    }
+  }
+}

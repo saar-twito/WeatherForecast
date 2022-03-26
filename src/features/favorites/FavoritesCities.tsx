@@ -7,7 +7,7 @@ import { removeCityFromFavorite } from './favoritesSlice';
 import './Favorites.scss'
 
 
-const Favorites = () => {
+const FavoritesCities = () => {
 
   const { favoriteCities }: FavoritesCitiesState = useAppSelector((state) => state.favorite)
   const dispatch = useAppDispatch();
@@ -19,25 +19,24 @@ const Favorites = () => {
   }, [])
 
 
-  const removeCity = (cityKey: string) => {
+  const removeCityFromFavoriteCities = (cityKey: string) => {
     if (favoriteCities.length === 1) {
       dispatch(removeCityFromFavorite(cityKey));
       navigate('/weather');
+      return
     }
-    else {
-      dispatch(removeCityFromFavorite(cityKey));
-    }
+    dispatch(removeCityFromFavorite(cityKey));
   }
 
 
-  const handleShowCity = (cityKey: string) => {
-    const city = favoriteCities.find(city => city.cityKey === cityKey);
-    if (city) {
+  const handleClickOnFiveDaysForecast = (cityKey: string) => {
+    const desireCity = favoriteCities.find(city => city.cityKey === cityKey);
+    if (desireCity) {
       navigate('/weather',
         {
           state: {
-            desireCity: `${city?.countryNameShort}, ${city?.cityName}`,
-            cityKey: city?.cityKey
+            desireCity: `${desireCity?.countryNameShort}, ${desireCity?.cityName}`,
+            cityKey: desireCity?.cityKey
           } as GoBackToFavoriteCity
 
         });
@@ -62,8 +61,8 @@ const Favorites = () => {
               </header>
               <p className="card-text">{city.description}</p>
               <footer>
-                <a onClick={() => handleShowCity(city.cityKey)} className="card-link">Show 5 days forecast</a>
-                <MdDeleteOutline onClick={() => removeCity(city.cityKey)} />
+                <button onClick={() => handleClickOnFiveDaysForecast(city.cityKey)} className="card-link">Show 5 days forecast</button>
+                <MdDeleteOutline onClick={() => removeCityFromFavoriteCities(city.cityKey)} />
               </footer>
             </div>
           </div>
@@ -73,4 +72,4 @@ const Favorites = () => {
   )
 }
 
-export default Favorites
+export default FavoritesCities

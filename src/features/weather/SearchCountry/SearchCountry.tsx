@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { BiLocationPlus } from 'react-icons/bi';
+import { BiLocationPlus, BiPlus } from 'react-icons/bi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { showErrorNotification, showInfoNotification, showSuccessNotification } from '../../../shared/toastNotification';
 import { FavoriteCity } from '../../favorites/favorites.interfaces';
 import { addCityToFavorite } from '../../favorites/favoritesSlice';
-import { updateUserQuery, updateCityDetails, getWeatherByQuery, getCitiesByQuery, getWeatherByUserLocation, getFiveDays, isUserAskedForItsLocation } from '../weatherSlice';
+import { updateUserQuery, updateCityGeneralInfo, getCityWeatherInfoByCityKey, getCitiesAutocomplete, getWeatherInfoByUserLocation, getFiveDaysWeatherForecast, isUserAskedForItsLocation } from '../weatherSlice';
 import debounce from 'lodash.debounce';
 import './SearchCountry.scss'
 
@@ -19,31 +19,31 @@ const SearchCountry = () => {
       debouncedChangeHandler.cancel();
     }
   }, [])
-  
 
 
-  const handleCitiesSearch = async (query: string) => {
+
+  const handleCitySearch = async (query: string) => {
     dispatch(updateUserQuery(query))
     const city = weather.cities.find(c => `${c.Country.ID}, ${c.LocalizedName}` === query)
     if (city) {
       try {
-        dispatch(updateCityDetails(city))
-        await dispatch(getWeatherByQuery(city.Key)).unwrap();
-        await dispatch(getFiveDays(city.Key)).unwrap();
+        dispatch(updateCityGeneralInfo(city))
+        await dispatch(getCityWeatherInfoByCityKey(city.Key)).unwrap();
+        await dispatch(getFiveDaysWeatherForecast(city.Key)).unwrap();
       } catch (e: any) {
         showErrorNotification(e.message)
       }
     }
     else {
       try {
-        await dispatch(getCitiesByQuery(query)).unwrap();
+        await dispatch(getCitiesAutocomplete(query)).unwrap();
       } catch (e: any) {
-        showErrorNotification(e.message) 
+        showErrorNotification(e.message)
       }
     }
   }
-  
-  const debouncedChangeHandler = debounce(handleCitiesSearch, 500);
+
+  const debouncedChangeHandler = debounce(handleCitySearch, 500);
 
 
   const isUserGeolocationAvailable = () => {
@@ -57,16 +57,16 @@ const SearchCountry = () => {
       dispatch(isUserAskedForItsLocation())
 
       try {
-        const { cityInfo } = await dispatch(getWeatherByUserLocation(position.coords)).unwrap();
-        await dispatch(getCitiesByQuery(cityInfo.EnglishName)).unwrap();
-        await dispatch(getFiveDays(cityInfo.Key)).unwrap();
+        const { cityInfo } = await dispatch(getWeatherInfoByUserLocation(position.coords)).unwrap();
+        await dispatch(getCitiesAutocomplete(cityInfo.EnglishName)).unwrap();
+        await dispatch(getFiveDaysWeatherForecast(cityInfo.Key)).unwrap();
       } catch (e: any) {
         showErrorNotification(e.message)
       }
     }
   }
 
-  const handleFavoriteCity = () => {
+  const handleAddingCityToFavorite = () => {
     const { cities, cityName, countryNameShort, cityWeatherInfo, fiveDaysForecast } = weather;
     if (favorite.favoriteCities.find(c => c.cityKey === cities[0].Key)) {
       showInfoNotification(`${cityName} already added to favorites cities`, 3000)
@@ -96,14 +96,21 @@ const SearchCountry = () => {
           placeholder="Search by city name" />
 
         <datalist id="countries">
-          {weather.cities?.map((city) => <option key={city.Key} value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
+          {weather.cities?.map((city) =>
+            <option key={city.Key}
+              value={`${city.Country.ID},
+            ${city.LocalizedName}`} />)}
         </datalist>
 
 
         {weather.isUserAskedForItsLocation ?
 
           <button className="btn btn-primary" type="button" disabled>
-            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true">
+            </span>
             Loading...
           </button>
 
@@ -112,7 +119,7 @@ const SearchCountry = () => {
           <button
             type='button'
             className="my-location"
-            onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="gps" />
+            onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="user-location" />
             My Location
           </button>
         }
@@ -123,11 +130,16 @@ const SearchCountry = () => {
         <button
           type="button"
           className="search"
-          onClick={() => handleCitiesSearch(weather.userQuerySearch)}>
+          onClick={() => handleCitySearch(weather.userQuerySearch)}>
           Search
         </button>
 
-        <button type="button" className="save" onClick={() => handleFavoriteCity()}>Save</button>
+        <button
+          type="button"
+          className="save"
+          onClick={() => handleAddingCityToFavorite()}>
+          <BiPlus /> Add
+        </button>
       </div>
 
     </div>

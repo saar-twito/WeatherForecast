@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import ShowInfo from './ShowWeatherInfo/ShowWeatherInfo'
+import ShowWeatherInfo from './ShowWeatherInfo/ShowWeatherInfo'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { requestDefaultCity, getFiveDays } from './weatherSlice';
+import { getCityWeatherInfo, getFiveDaysWeatherForecast } from './weatherSlice';
 import { showErrorNotification } from '../../shared/toastNotification';
 import { CityWeatherState } from './weather.interfaces';
 import SearchCountry from './SearchCountry/SearchCountry';
@@ -19,19 +19,19 @@ const Weather = () => {
 
   useEffect(() => {
     if (routerState) {
-      sendDefaultCity(routerState.desireCity);
+      getCityInfo(routerState.desireCity);
       getFiveDaysForecastForCity(routerState.cityKey);
       return;
     }
-    sendDefaultCity();
+    getCityInfo();
     getFiveDaysForecastForCity();
   }, [])
 
 
-  const sendDefaultCity = async (desireCity: string = weather.userQuerySearch) => {
+  const getCityInfo = async (desireCity: string = weather.userQuerySearch) => {
     try {
       // If there is no desired city, use the query search.
-      await dispatch(requestDefaultCity(desireCity.split(',')[1].trim())).unwrap()
+      await dispatch(getCityWeatherInfo(desireCity.split(',')[1].trim())).unwrap()
 
     } catch (e: any) {
       showErrorNotification(e.message)
@@ -41,7 +41,7 @@ const Weather = () => {
 
   const getFiveDaysForecastForCity = async (cityKey: string = weather.cities[0]?.Key || TEL_AVIV_CITY_KEY) => {
     try {
-      await dispatch(getFiveDays(cityKey)).unwrap();
+      await dispatch(getFiveDaysWeatherForecast(cityKey)).unwrap();
     } catch (e: any) {
       showErrorNotification(e.message)
     }
@@ -51,7 +51,7 @@ const Weather = () => {
   return (
     <>
       <SearchCountry />
-      <ShowInfo />
+      <ShowWeatherInfo />
     </>
   )
 }
