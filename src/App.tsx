@@ -9,7 +9,7 @@ import './App.scss';
 const App = () => {
 
   return (
-    <div className={`App cold`}>
+    <div className='App'>
       <BrowserRouter>
         <NavigationBar />
         <Routes>

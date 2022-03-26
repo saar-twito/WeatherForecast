@@ -6,7 +6,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { removeCityFromFavorite } from './favoritesSlice';
 import './Favorites.scss'
 
-
+// @Component - responsible for managing favorites cities list
 const FavoritesCities = () => {
 
   const { favoriteCities }: FavoritesCitiesState = useAppSelector((state) => state.favorite)

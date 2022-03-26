@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 import { GoBackToFavoriteCity } from '../favorites/favorites.interfaces';
 
 
-// @Component - centralize searching city, user location and weather info
+// @Component - centralize searching city, user location, weather info and weather forecast
 const Weather = () => {
   const TEL_AVIV_CITY_KEY = '215854';
 

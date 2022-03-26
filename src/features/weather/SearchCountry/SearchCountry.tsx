@@ -4,7 +4,15 @@ import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { showErrorNotification, showInfoNotification, showSuccessNotification } from '../../../shared/toastNotification';
 import { FavoriteCity } from '../../favorites/favorites.interfaces';
 import { addCityToFavorite } from '../../favorites/favoritesSlice';
-import { updateUserQuery, updateCityGeneralInfo, getCityWeatherInfoByCityKey, getCitiesAutocomplete, getWeatherInfoByUserLocation, getFiveDaysWeatherForecast, isUserAskedForItsLocation } from '../weatherSlice';
+import {
+  updateUserQuery,
+  updateCityGeneralInfo,
+  getCityWeatherInfoByCityKey,
+  getCitiesAutocomplete,
+  getWeatherInfoByUserLocation,
+  getFiveDaysWeatherForecast,
+  isUserAskedForItsLocation
+} from '../weatherSlice';
 import debounce from 'lodash.debounce';
 import isAlpha from 'validator/es/lib/isAlpha';
 import './SearchCountry.scss'
@@ -24,20 +32,17 @@ const SearchCountry = () => {
 
 
   const handleCitySearch = async (query: string) => {
-    // 
-    if (query.includes(',')) { // If user click on option
-      await updateState();
-    }
+    // If user click on option
+    if (query.includes(',')) await updateState();
 
+    // when user typing...
     else if (isAlpha(query, "en-US", { ignore: " " })) {
       setIsEnglish(true)
       await updateState();
     }
-    else {
-      setIsEnglish(false)
-      console.log('no enflish');
-    }
 
+    // if user typing in non-english characters
+    else setIsEnglish(false)
 
     async function updateState() {
       dispatch(updateUserQuery(query));
@@ -114,50 +119,29 @@ const SearchCountry = () => {
           onChange={(e) => debouncedChangeHandler(e.target.value)}
           placeholder="Search by city name" />
 
-        <p
-          className="search-error">{!isEnglish ?
-            <div className="alert alert-info" role="alert">
-              Search only in English
-            </div>
-            :
-            null}
-        </p>
+        <p className="search-error">{!isEnglish ? <div className="alert alert-info" role="alert">Search only in English</div> : null}</p>
 
         <datalist id="countries">
-          {weather.cities?.map((city) =>
-            <option key={city.Key} value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
+          {weather.cities?.map((city) => <option key={city.Key} value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
         </datalist>
 
 
         {weather.isUserAskedForItsLocation ?
 
           <button className="btn btn-primary" type="button" disabled>
-            <span
-              className="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true">
-            </span>
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Loading...
           </button>
 
           :
 
-          <button
-            type='button'
-            className="my-location"
-            onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="user-location" />
+          <button type='button' className="my-location" onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="user-location" />
             My Location
           </button>
         }
       </div>
 
-
-      <button
-        type="button"
-        className="save"
-        onClick={() => handleAddingCityToFavorite()}>Save
-      </button>
-
+      <button type="button" className="save" onClick={() => handleAddingCityToFavorite()}>Save </button>
 
     </div>
 
