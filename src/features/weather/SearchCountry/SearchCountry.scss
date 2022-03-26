@@ -8,7 +8,7 @@
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: darken($color: $background, $amount: 5%)
+    background-color: darken($color: $background, $amount: 5%);
   }
 }
 
@@ -36,6 +36,14 @@
       padding: 6px;
     }
 
+    .search-error {
+      width: -webkit-fill-available;
+
+      .alert{
+        padding: 0.5rem 0.5rem;
+      }
+    }
+
     .my-location {
       @include searchAndUserLocationButtons(#409eff);
       display: flex;
@@ -46,15 +54,8 @@
       }
     }
   }
-  .search-and-save-buttons-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    .search {
-      @include searchAndUserLocationButtons(#409eff);
-    }
-    .save {
-      @include searchAndUserLocationButtons(#20a366);
-    }
+
+  .save {
+    @include searchAndUserLocationButtons(#20a366);
   }
 }

@@ -156,6 +156,7 @@ export const weatherSlice = createSlice({
       .addCase(getFiveDaysWeatherForecast.fulfilled, (state, { payload }) => {
         state.fiveDaysForecast.Headline.Text = payload.Headline.Text
         state.fiveDaysForecast.DailyForecasts = [...payload.DailyForecasts]
+        console.log(".addCase ~ payload", payload)
       })
 
   }

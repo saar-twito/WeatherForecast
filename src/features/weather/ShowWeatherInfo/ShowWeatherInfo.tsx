@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import Spinner from '../../../shared/Spinner/Spinner';
 import { CityWeatherState, TemperatureUnits } from '../weather.interfaces';
 import { changeTemperatureUnit } from '../weatherSlice';
+import { WiMoonAltNew, WiCloudy, WiRainWind, WiSnowflakeCold } from "react-icons/wi";
 import './ShowWeatherInfo.scss'
 
 const ShowWeatherInfo = () => {
@@ -23,10 +23,15 @@ const ShowWeatherInfo = () => {
 
   const fahrenheitToCelsius = (fahrenheitMin: number, fahrenheitMax: number): JSX.Element => {
     return (
-      <p>{((fahrenheitMin - 32) * 5 / 9).toFixed(1)}-{((fahrenheitMax - 32) * 5 / 9).toFixed(1)}</p>
+      <p>{((fahrenheitMin - 32) * 5 / 9).toFixed(0)}&#176; / {((fahrenheitMax - 32) * 5 / 9).toFixed(0)}&#176;</p>
     )
   }
 
+
+
+  // const getWeatherIcon = (tempa) => {
+    
+  // }
 
   return (
     <>
@@ -45,13 +50,17 @@ const ShowWeatherInfo = () => {
               <div className='temperature'>
                 {weather.temperatureUnit === TemperatureUnits.CELSIUS ?
                   <>
-                    <p>{weather.cityWeatherInfo.Temperature.Metric.Value.toFixed(1)}&#x2103;</p>
-                    <p className="unit" onClick={() => dispatch(changeTemperatureUnit())}>&#x2109;</p>
+                    <p className="temperature-value">{weather.cityWeatherInfo.Temperature.Metric.Value.toFixed(0)}
+                    </p>
+                    <sup className="active-unit">&#x2103;</sup>
+                    <p className="passive-unit" onClick={() => dispatch(changeTemperatureUnit())}>&#x2109;</p>
                   </>
                   :
                   <>
-                    <p>{weather.cityWeatherInfo.Temperature.Imperial.Value.toFixed(1)}&#x2109;</p>
-                    <p className="unit" onClick={() => dispatch(changeTemperatureUnit())}>&#x2103;</p>
+                    <p className="temperature-value">{weather.cityWeatherInfo.Temperature.Imperial.Value.toFixed(0)}
+                    </p>
+                    <sup className="active-unit">&#x2109;</sup>
+                    <p className="passive-unit" onClick={() => dispatch(changeTemperatureUnit())}>&#x2103;</p>
                   </>}
               </div>
 
@@ -70,8 +79,11 @@ const ShowWeatherInfo = () => {
                   <footer>
                     {weather.temperatureUnit === TemperatureUnits.CELSIUS ?
                       fahrenheitToCelsius(day.Temperature.Minimum.Value, day.Temperature.Maximum.Value) :
-                      <p>{day.Temperature.Minimum.Value.toFixed(1)}-{day.Temperature.Maximum.Value.toFixed(1)}</p>
+                      <p>{day.Temperature.Minimum.Value.toFixed(0)}&#176; / {day.Temperature.Maximum.Value.toFixed(0)}&#176;</p>
                     }
+
+                    {/* {getWeatherIcon(day.Temperature)}
+                    <WiMoonAltNew /> */}
                   </footer>
 
                 </div>
@@ -81,8 +93,8 @@ const ShowWeatherInfo = () => {
         </>
 
         :
-        
-        <Spinner />
+
+        null
       }
 
     </>

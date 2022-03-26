@@ -34,11 +34,18 @@
     align-items: center;
     position: relative;
 
-    :first-child {
+    .temperature-value {
       font-size: 2.3rem;
       margin: 0;
     }
-    .unit {
+    .active-unit{
+      position: absolute;
+      top: 35px;
+      right: 44px;
+      font-size: 18px;
+    }
+
+    .passive-unit {
       position: absolute;
       top: 0;
       right: 1px;
@@ -73,13 +80,12 @@
   .day {
     box-shadow: #32325d40 0px 2px 5px -1px, #0000004d 0px 1px 3px -1px;
     background: aliceblue;
-    width: 110px;
-    height: 110px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 13px;
+    padding: 19px;
 
 
     header {
@@ -89,8 +95,10 @@
       align-items: center;
       font-weight: 600;
       
+      
       :last-child {
         text-transform: uppercase;
+        margin-left: 17px;
       }
     }
   }

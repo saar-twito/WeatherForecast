@@ -50,7 +50,7 @@ export interface CityInformation {
 }
 
 
-export interface Day {
+export interface ForecastDay {
   Date: string,
   Temperature: {
     Minimum: {
@@ -71,7 +71,7 @@ export interface FiveDaysCityForecast {
   Headline: {
     Text: string,
   },
-  DailyForecasts: Day[];
+  DailyForecasts: ForecastDay[];
 
 }
 
