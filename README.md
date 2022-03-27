@@ -1,8 +1,7 @@
 Description of the application: 
 Users can search for any city in the world and get the current weather and five days of the weather forecast.
 Users can save their favorite location, and it will save on the Favorites page. 
-Clicking on a favorite city will navigate to the main
-screen showing the details of that location.
+Clicking on a favorite city will navigate to the main screen showing the details of that location.
 
 
 Application APIs:
@@ -14,7 +13,7 @@ d) Geoposition Search - Returns information about a specific location by GeoPosi
 
 
 Programming language: Typescript.
-State management: Redux Toolkit
+State management: Redux Toolkit.
 Responsive: Yes.
-Class or Hooks: Hooks
+Class or Hooks: Hooks.
 
