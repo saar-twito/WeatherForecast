@@ -1,6 +1,6 @@
 import { WiCloud, WiCloudyWindy, WiDayCloudy, WiDayHaze, WiMoonAltNew, WiNightClear, WiRainWind, WiThunderstorm } from 'react-icons/wi';
 import { useAppSelector } from '../../../app/hooks';
-import { CityWeatherState, ForecastDay, TemperatureUnits } from '../weather.interfaces';
+import { CityWeatherState, ForecastDay, TemperatureUnits, TypeOfWeather } from '../weather.interfaces';
 import './FiveDaysForecast.scss'
 
 // @Component - responsible for showing 5 days forecast.
@@ -26,18 +26,52 @@ const FiveDaysForecast = () => {
   )
 
 
-
-  const getWeatherIcon = (day: ForecastDay) => {
+  const getWeatherIcon = (day: ForecastDay): JSX.Element => {
     const iconSize = 30;
     const iconColor = "gray"
 
-    let dayTime: any;
-    let nightTime: any;
+    const getTypeOfWeatherIcon = (hasPrecipitation: boolean, IconPhrase: string) => {
+      if (hasPrecipitation) {
+        if (IconPhrase.includes(TypeOfWeather.Storm))
+          return <WiThunderstorm color={iconColor} size={iconSize} />;
+        else
+          return <WiRainWind color={iconColor} size={iconSize} />;
+      }
+      else {
+        switch (IconPhrase) {
+          case TypeOfWeather.Sunny:
+          case TypeOfWeather.MostlySunny:
+            return <WiMoonAltNew color='#ffec07' size={iconSize} />;
 
-    getDayWeatherIcon();
+
+          case TypeOfWeather.MostlyClear:
+          case TypeOfWeather.Clear:
+            return <WiNightClear color={iconColor} size={iconSize} />;
 
 
-    getNightWeatherIcon();
+          case TypeOfWeather.PartlyCloudy:
+            return <WiDayCloudy color={iconColor} size={iconSize} />;
+
+
+          case TypeOfWeather.IntermittentClouds:
+          case TypeOfWeather.Cloudy:
+          case TypeOfWeather.MostlyCloudy:
+            return <WiCloudyWindy color={iconColor} size={iconSize} />;
+
+
+          case TypeOfWeather.HazySunshine:
+            return <WiDayHaze color={iconColor} size={iconSize} />;
+
+
+          case TypeOfWeather.Dreary:
+            return <WiCloud color={iconColor} size={iconSize} />;
+
+        }
+      }
+    }
+
+    let dayTime = getTypeOfWeatherIcon(day.Day.HasPrecipitation, day.Day.IconPhrase)
+    let nightTime = getTypeOfWeatherIcon(day.Night.HasPrecipitation, day.Night.IconPhrase)
 
     return (
       <div className="icon-weather">
@@ -45,82 +79,6 @@ const FiveDaysForecast = () => {
         <p>{nightTime}</p>
       </div>
     )
-
-
-    function getNightWeatherIcon() {
-      if (day.Night.HasPrecipitation) {
-        if (day.Night.IconPhrase.includes('storms'))
-          nightTime = <WiThunderstorm color={iconColor} size={iconSize} />;
-        else
-          nightTime = <WiRainWind color={iconColor} size={iconSize} />;
-      }
-      else {
-        switch (day.Night.IconPhrase) {
-          case "Mostly clear":
-          case "Clear":
-            nightTime = <WiNightClear color={iconColor} size={iconSize} />;
-            break;
-
-          case "Partly cloudy":
-            nightTime = <WiDayCloudy color={iconColor} size={iconSize} />;
-            break;
-
-          case "Intermittent clouds":
-          case "Cloudy":
-          case "Mostly cloudy":
-            nightTime = <WiCloudyWindy color={iconColor} size={iconSize} />;
-            break;
-
-          case "Hazy sunshine":
-            nightTime = <WiDayHaze color={iconColor} size={iconSize} />;
-            break;
-
-          case "Dreary":
-            nightTime = <WiCloud color={iconColor} size={iconSize} />;
-            break;
-        }
-      }
-    }
-
-    function getDayWeatherIcon() {
-      if (day.Day.HasPrecipitation) {
-        if (day.Day.IconPhrase.includes('storms'))
-          dayTime = <WiThunderstorm color={iconColor} size={iconSize} />;
-        else
-          dayTime = <WiRainWind color={iconColor} size={iconSize} />;
-      }
-      else {
-        switch (day.Day.IconPhrase) {
-          case "Sunny":
-          case "Mostly sunny":
-            dayTime = <WiMoonAltNew color='#ffec07' size={iconSize} />;
-            break;
-
-          case "Mostly clear":
-          case "Clear":
-            dayTime = <WiNightClear color={iconColor} size={iconSize} />;
-            break;
-
-          case "Partly cloudy":
-            dayTime = <WiDayCloudy color={iconColor} size={iconSize} />;
-            break;
-
-          case "Intermittent clouds":
-          case "Cloudy":
-          case "Mostly cloudy":
-            dayTime = <WiCloudyWindy color={iconColor} size={iconSize} />;
-            break;
-
-          case "Hazy sunshine":
-            dayTime = <WiDayHaze color={iconColor} size={iconSize} />;
-            break;
-
-          case "Dreary":
-            dayTime = <WiCloud color={iconColor} size={iconSize} />;
-            break;
-        }
-      }
-    }
   }
 
   return (
@@ -131,7 +89,7 @@ const FiveDaysForecast = () => {
           <header>{handleDateFormat(day.Date)}</header>
 
           <footer>
-            {weather.temperatureUnit === TemperatureUnits.CELSIUS ?
+            {weather.temperatureUnit === TemperatureUnits.Celsius ?
               fahrenheitToCelsius(day.Temperature.Minimum.Value, day.Temperature.Maximum.Value) :
               <p>{day.Temperature.Minimum.Value.toFixed(0)}&#176; / {day.Temperature.Maximum.Value.toFixed(0)}&#176;</p>}
 

@@ -27,7 +27,7 @@ const initialState: CityWeatherState = {
   },
   userQuerySearch: "IL, Tel Aviv",
   cityName: "",
-  temperatureUnit: TemperatureUnits.CELSIUS,
+  temperatureUnit: TemperatureUnits.Celsius ,
   countryNameShort: "",
   cityWeatherInfo: {
     Temperature: {
@@ -97,8 +97,8 @@ export const weatherSlice = createSlice({
       const tempObj = state.cityWeatherInfo.Temperature
 
       // Celsius => Fahrenheit
-      if (temperatureUnit === TemperatureUnits.CELSIUS) {
-        state.temperatureUnit = TemperatureUnits.FAHRENHEIT
+      if (temperatureUnit === TemperatureUnits.Celsius ) {
+        state.temperatureUnit = TemperatureUnits.Fahrenheit 
         if (!tempObj.Imperial.Value.toString()) {
           const temp = tempObj.Imperial.Value;
           tempObj.Imperial.Value = temp * 9 / 5 + 32;
@@ -106,8 +106,8 @@ export const weatherSlice = createSlice({
       }
 
       // Fahrenheit => Celsius
-      else if (temperatureUnit === TemperatureUnits.FAHRENHEIT) {
-        state.temperatureUnit = TemperatureUnits.CELSIUS
+      else if (temperatureUnit === TemperatureUnits.Fahrenheit ) {
+        state.temperatureUnit = TemperatureUnits.Celsius 
         if (!tempObj.Metric.Value.toString()) {
           const temp = tempObj.Metric.Value;
           tempObj.Metric.Value = (temp - 32) * 5 / 9;

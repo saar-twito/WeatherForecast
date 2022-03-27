@@ -1,7 +1,22 @@
 export enum TemperatureUnits {
-  CELSIUS = "C",
-  FAHRENHEIT = 'F',
+  Celsius = "C",
+  Fahrenheit = 'F',
 }
+
+export enum TypeOfWeather {
+  Sunny = "Sunny",
+  MostlySunny = "Mostly sunny",
+  MostlyClear = "Mostly clear",
+  Clear = "Clear",
+  PartlyCloudy = "Partly cloudy",
+  IntermittentClouds = "Intermittent clouds",
+  Cloudy = "Cloudy",
+  MostlyCloudy = "Mostly cloudy",
+  HazySunshine = "Hazy sunshine",
+  Dreary = "Dreary",
+  Storm = "storms",
+}
+
 
 
 // When i search for city.

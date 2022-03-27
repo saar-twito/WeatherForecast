@@ -24,7 +24,7 @@ const ShowWeatherInfo = () => {
 
           {/* Switch between units (C,F) */}
           <div className='temperature'>
-            {weather.temperatureUnit === TemperatureUnits.CELSIUS ?
+            {weather.temperatureUnit === TemperatureUnits.Celsius  ?
               <>
                 <p className="temperature-value">{weather.cityWeatherInfo.Temperature.Metric.Value.toFixed(0)}</p>
                 <sup className="active-unit">&#x2103;</sup>
