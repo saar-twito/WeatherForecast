@@ -50,6 +50,7 @@ const FiveDaysForecast = () => {
 
 
           case TypeOfWeather.PartlyCloudy:
+          case TypeOfWeather.PartlySunny:
             return <WiDayCloudy color={iconColor} size={iconSize} />;
 
 
@@ -90,8 +91,8 @@ const FiveDaysForecast = () => {
 
           <footer>
             {weather.temperatureUnit === TemperatureUnits.Celsius ?
-              fahrenheitToCelsius(day.Temperature.Minimum.Value, day.Temperature.Maximum.Value) :
-              <p>{day.Temperature.Minimum.Value.toFixed(0)}&#176; / {day.Temperature.Maximum.Value.toFixed(0)}&#176;</p>}
+              fahrenheitToCelsius(day.Temperature.Maximum.Value, day.Temperature.Minimum.Value) :
+              <p>{day.Temperature.Maximum.Value.toFixed(0)}&#176; / {day.Temperature.Minimum.Value.toFixed(0)}&#176;</p>}
 
             {getWeatherIcon(day)}
           </footer>
