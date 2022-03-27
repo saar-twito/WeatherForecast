@@ -19,7 +19,7 @@ const NavigationBar = () => {
     <header>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
-          <NavLink className="navbar-brand" to="/">Weather app</NavLink>
+          <NavLink className="navbar-brand" to="/">Weather test app</NavLink>
           <button
             className="navbar-toggler"
             type="button"
