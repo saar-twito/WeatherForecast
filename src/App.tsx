@@ -17,7 +17,7 @@ const App = () => {
           <Route path="/favorites" element={<FavoritesCities />} />
 
           {/* Default page */}
-          <Route path="/saar-twito-20-03-2022/" element={<Navigate replace to="/weather" />} />
+          <Route path="/s" element={<Navigate replace to="/weather" />} />
 
           {/* 404 Route */}
           <Route path="/page-not-found" element={<PageNotFound />} />
