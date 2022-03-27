@@ -1,5 +1,4 @@
 {
-  "homepage": "https://saar-twito.github.io/saar-twito-20-03-2022",
   "name": "client",
   "version": "0.1.0",
   "private": true,
@@ -29,8 +28,6 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
