@@ -42,7 +42,7 @@ const FavoritesCities = () => {
         });
     }
   }
-
+ 
   return (
     <div className="favorites-cities-wrapper">
       {favoriteCities.map((city) => (
