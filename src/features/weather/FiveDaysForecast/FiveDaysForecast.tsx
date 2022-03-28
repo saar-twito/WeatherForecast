@@ -83,7 +83,7 @@ const FiveDaysForecast = () => {
 
     let dayTime = getTypeOfWeatherIcon(day.Day.HasPrecipitation, day.Day.IconPhrase)
     let nightTime = getTypeOfWeatherIcon(day.Night.HasPrecipitation, day.Night.IconPhrase)
-
+ 
     return (
       <div className="icon-weather">
         <p>{dayTime}</p>
