@@ -15,17 +15,19 @@
   }
 
   :nth-child(3) {
+    $backgroundColor: #efb943;
+    $boxShadowColor: #11111a0d;
     color: aliceblue;
     text-decoration: none;
-    background-color: #efb943;
+    background-color: $backgroundColor;
     padding: 15px;
     border-radius: 39px;
     font-size: 20px;
     transition: background-color 0.2s;
-    box-shadow: #11111a0d 0px 4px 16px, #11111a0d 0px 8px 32px;
+    box-shadow: $boxShadowColor 0px 4px 16px, $boxShadowColor 0px 8px 32px;
 
     &:hover {
-      background-color: darken($color: #efb943, $amount: 5%);
+      background-color: darken($color: $backgroundColor, $amount: 5%);
     }
   }
 }

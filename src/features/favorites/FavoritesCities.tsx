@@ -5,11 +5,13 @@ import { FavoritesCitiesState, GoBackToFavoriteCity } from './favorites.interfac
 import { MdDeleteOutline } from "react-icons/md";
 import { removeCityFromFavorite } from './favoritesSlice';
 import './Favorites.scss'
+import { CityWeatherState, TemperatureUnits } from '../weather/weather.interfaces';
 
 // @Component - responsible for managing favorites cities list
 const FavoritesCities = () => {
 
   const { favoriteCities }: FavoritesCitiesState = useAppSelector((state) => state.favorite)
+  const weather: CityWeatherState = useAppSelector((state) => state.weather)
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate()
@@ -42,20 +44,33 @@ const FavoritesCities = () => {
         });
     }
   }
- 
+
   return (
     <div className="favorites-cities-wrapper">
       {favoriteCities.map((city) => (
         <div key={city.cityKey} className="card">
           <div className="card-body">
             <header>
+
               <div>
                 <h5 className="card-title">{city.countryNameShort}, {city.cityName}</h5>
                 <h6 className="card-subtitle mb-2 text-muted">{city.cityWeatherInfo.WeatherText}</h6>
               </div>
-              <div>
-                <p className="card-title">{city.cityWeatherInfo.Temperature.Metric.Value}&#x2103;</p>
-                <p className="card-title">{city.cityWeatherInfo.Temperature.Imperial.Value}&#x2109;</p>
+
+              <div className="temperature">
+
+                {weather.temperatureUnit === TemperatureUnits.Celsius ?
+                  <>
+                    <p className="card-title">{city.cityWeatherInfo.Temperature.Metric.Value.toFixed(0)}</p>
+                    <sup>&#x2103;</sup>
+                  </>
+
+                  :
+                  <>
+                    <p className="card-title">{city.cityWeatherInfo.Temperature.Imperial.Value.toFixed(0)}</p>
+                    <sup>&#x2109;</sup>
+                  </>
+                }
               </div>
             </header>
             <p className="card-text">{city.description}</p>

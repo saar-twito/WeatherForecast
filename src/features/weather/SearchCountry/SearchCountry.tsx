@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BiLocationPlus } from 'react-icons/bi';
+import { BiLocationPlus, BiInfoCircle, BiErrorAlt } from 'react-icons/bi';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { showErrorNotification, showInfoNotification, showSuccessNotification } from '../../../shared/toastNotification';
 import { FavoriteCity } from '../../favorites/favorites.interfaces';
@@ -19,25 +19,26 @@ import './SearchCountry.scss'
 
 // @Component - responsible for searching city and user location.
 const SearchCountry = () => {
-  const [isEnglish, setIsEnglish] = useState(true)
+  const [isEnglish, setIsEnglish] = useState<boolean>(true);
+  const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
 
-  const { weather, favorite } = useAppSelector((state) => state)
+  const { weather, favorite } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    return () => {
-      debouncedChangeHandler.cancel();
-    }
+    return () => debouncedChangeHandler.cancel();
   }, [])
 
 
   const handleCitySearch = async (query: string) => {
+    if (isFirstRendering) setIsFirstRendering(false);
+
     // If user click on option
     if (query.includes(',')) await updateState();
 
     // when user typing...
     else if (isAlpha(query, "en-US", { ignore: " " })) {
-      setIsEnglish(true)
+      setIsEnglish(true);
       await updateState();
     }
 
@@ -89,6 +90,7 @@ const SearchCountry = () => {
     }
   }
 
+
   const handleAddingCityToFavorite = () => {
     const { cities, cityName, countryNameShort, cityWeatherInfo, fiveDaysForecast } = weather;
     if (favorite.favoriteCities.find(c => c.cityKey === cities[0].Key)) {
@@ -108,29 +110,58 @@ const SearchCountry = () => {
     }
   }
 
+
+  const handleErrors = () => {
+    // if both of error is true
+    if (!weather.cities.length && !isEnglish) {
+      return (
+        <div className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</div>
+      )
+    }
+
+    // if there is no city
+    if (!weather.cities.length) {
+      return (
+        <div className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</div>
+      )
+    }
+    // if the user dont use English
+    if (!isEnglish) {
+      return (
+        <div className="search-error alert alert-danger" role="alert"><BiErrorAlt /> Search only in English</div>
+      )
+    }
+
+
+  }
+
   return (
     <div className="search-location-wrapper">
-
       <div className='search-location'>
+
+        {/* User search field */}
         <input
           list="countries"
-          type='text'
+          type='search'
           className="search-input-by-city"
           onChange={(e) => debouncedChangeHandler(e.target.value)}
-          placeholder="Search by city name" />
+          placeholder="Search by city name"
+          autoFocus />
 
-        <p className="search-error">{!isEnglish ? <div className="alert alert-info" role="alert">Search only in English</div> : null}</p>
+        {/* Any errors related to user search */}
+        {!isFirstRendering && handleErrors()}
 
+        {/* List of cities base on user search*/}
         <datalist id="countries">
           {weather.cities?.map((city) => <option key={city.Key} value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
         </datalist>
 
-
+        {/* User location button */}
         {
           weather.isUserAskedForItsLocation ?
             <button className="btn btn-primary" type="button" disabled>
               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Loading...
+              &nbsp;Loading...
             </button>
             :
             <button type='button' className="my-location" onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="user-location" />
@@ -142,7 +173,6 @@ const SearchCountry = () => {
       <button type="button" className="save" onClick={() => handleAddingCityToFavorite()}>Save </button>
 
     </div>
-
   )
 }
 

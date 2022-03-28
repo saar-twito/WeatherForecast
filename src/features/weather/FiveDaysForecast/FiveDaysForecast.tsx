@@ -1,4 +1,13 @@
-import { WiCloud, WiCloudyWindy, WiDayCloudy, WiDayHaze, WiMoonAltNew, WiNightClear, WiRainWind, WiThunderstorm } from 'react-icons/wi';
+import {
+  WiCloud,
+  WiCloudyWindy,
+  WiDayCloudy,
+  WiDayHaze,
+  WiMoonAltNew,
+  WiNightClear,
+  WiRainWind,
+  WiThunderstorm
+} from 'react-icons/wi';
 import { useAppSelector } from '../../../app/hooks';
 import { CityWeatherState, ForecastDay, TemperatureUnits, TypeOfWeather } from '../weather.interfaces';
 import './FiveDaysForecast.scss'
@@ -29,6 +38,7 @@ const FiveDaysForecast = () => {
   const getWeatherIcon = (day: ForecastDay): JSX.Element => {
     const iconSize = 30;
     const iconColor = "gray"
+    const sunIconColor = "#ffec07"
 
     const getTypeOfWeatherIcon = (hasPrecipitation: boolean, IconPhrase: string) => {
       if (hasPrecipitation) {
@@ -41,7 +51,7 @@ const FiveDaysForecast = () => {
         switch (IconPhrase) {
           case TypeOfWeather.Sunny:
           case TypeOfWeather.MostlySunny:
-            return <WiMoonAltNew color='#ffec07' size={iconSize} />;
+            return <WiMoonAltNew color={sunIconColor} size={iconSize} />;
 
 
           case TypeOfWeather.MostlyClear:

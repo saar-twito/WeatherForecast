@@ -46,7 +46,7 @@ export const getCityWeatherInfoByCityKeyAPI = async (cityKey: string): Promise<C
   }
 }
 
-
+// Get five days weather forecast of selected city
 export const getFiveDaysForecastAPI = async (cityKey: string): Promise<FiveDaysCityForecast> => {
   try {
     const fiveDaysCityForecast: FiveDaysCityForecast = (await axiosInstance.get(`forecasts/v1/daily/5day/${cityKey}`)).data

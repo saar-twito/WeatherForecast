@@ -10,8 +10,8 @@ const NavigationBar = () => {
 
   const handleFavoriteNavigation = (e: any) => {
     if (!favoriteCities.length) {
-      showInfoNotification('Favorite cities are empty. Please add a city to favorites.', 3000)
       e.preventDefault()
+      showInfoNotification('Favorite cities are empty. Please add a city to favorites.', 3000)
     }
   }
 
@@ -19,7 +19,7 @@ const NavigationBar = () => {
     <header>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
-          <NavLink className="navbar-brand" to="/">Weather test app</NavLink>
+          <NavLink className="navbar-brand" to="/">Weather app</NavLink>
           <button
             className="navbar-toggler"
             type="button"
