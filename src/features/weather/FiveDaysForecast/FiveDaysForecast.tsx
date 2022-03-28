@@ -6,7 +6,7 @@ import {
   WiMoonAltNew,
   WiNightClear,
   WiRainWind,
-  WiThunderstorm
+  WiThunderstorm, WiNightAltPartlyCloudy
 } from 'react-icons/wi';
 import { useAppSelector } from '../../../app/hooks';
 import { CityWeatherState, ForecastDay, TemperatureUnits, TypeOfWeather } from '../weather.interfaces';
@@ -60,6 +60,9 @@ const FiveDaysForecast = () => {
 
 
           case TypeOfWeather.PartlyCloudy:
+            return <WiNightAltPartlyCloudy color={iconColor} size={iconSize} />;
+
+            
           case TypeOfWeather.PartlySunny:
             return <WiDayCloudy color={iconColor} size={iconSize} />;
 
@@ -83,7 +86,7 @@ const FiveDaysForecast = () => {
 
     let dayTime = getTypeOfWeatherIcon(day.Day.HasPrecipitation, day.Day.IconPhrase)
     let nightTime = getTypeOfWeatherIcon(day.Night.HasPrecipitation, day.Night.IconPhrase)
- 
+
     return (
       <div className="icon-weather">
         <p>{dayTime}</p>

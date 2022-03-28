@@ -51,7 +51,7 @@
     }
 
     .my-location {
-      @include searchAndUserLocationButtons(#0b5ed7);
+      @include searchAndUserLocationButtons(#387bde);
       display: flex;
       width: 133px;
 
@@ -63,7 +63,7 @@
   }
 
   .save {
-    @include searchAndUserLocationButtons(#157347);
+    @include searchAndUserLocationButtons(#299563);
     width: 67px;
   }
 }

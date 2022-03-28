@@ -36,19 +36,8 @@ body {
     font-family: "Inter", sans-serif;
     transition: all 0.5s;
     min-height: 100vh;
-    background-image: linear-gradient(
-        to bottom,
-        #6d8ada,
-        #6c85d5,
-        #6b81d0,
-        #697ccb,
-        #6878c6,
-        #6272be,
-        #5c6db5,
-        #5667ad,
-        #4a5ea0,
-        #3f5692,
-        #344d85,
-        #294578
-    );
+    background: #92b2cb;
+	background: -webkit-linear-gradient(top, #c9dbe9 0%, #fff 100%);
+	background: -linear-gradient(top, #c9dbe9 0%, #fff 100%);
+	background: -moz-linear-gradient(top, #c9dbe9 0%, #fff 100%);
 }
