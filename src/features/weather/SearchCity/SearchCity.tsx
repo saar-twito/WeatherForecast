@@ -113,12 +113,26 @@ const SearchCountry = () => {
 
 
   const handleErrors = () => {
+
+    const messagesVariants = {
+      initial: {
+        opacity: 0
+      },
+      animate: {
+        opacity: 1,
+        transition: {
+          duration: 0.3
+        }
+      }
+    }
     // if both of error is true
     if (!weather.cities.length && !isEnglish) {
       return (
-        <motion.div initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }} className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</motion.div>
+        <motion.div
+          variants={messagesVariants}
+          initial="initial"
+          animate="animate"
+          className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</motion.div>
       )
     }
 
@@ -126,18 +140,21 @@ const SearchCountry = () => {
     if (!weather.cities.length) {
       return (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          variants={messagesVariants}
+          initial="initial"
+          animate="animate"
+
           className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</motion.div>
       )
     }
     // if the user dont use English
     if (!isEnglish) {
       return (
-        <motion.div initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }} className="search-error alert alert-danger" role="alert"><BiErrorAlt /> Search only in English</motion.div>
+        <motion.div
+          variants={messagesVariants}
+          initial="initial"
+          animate="animate"
+          className="search-error alert alert-danger" role="alert"><BiErrorAlt /> Search only in English</motion.div>
       )
     }
 
