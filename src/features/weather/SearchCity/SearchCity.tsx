@@ -15,7 +15,8 @@ import {
 } from '../weatherSlice';
 import debounce from 'lodash.debounce';
 import isAlpha from 'validator/es/lib/isAlpha';
-import './SearchCountry.scss'
+import { motion } from "framer-motion"
+import './SearchCity.scss'
 
 // @Component - responsible for searching city and user location.
 const SearchCountry = () => {
@@ -115,20 +116,28 @@ const SearchCountry = () => {
     // if both of error is true
     if (!weather.cities.length && !isEnglish) {
       return (
-        <div className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</div>
+        <motion.div initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }} className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</motion.div>
       )
     }
 
     // if there is no city
     if (!weather.cities.length) {
       return (
-        <div className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</motion.div>
       )
     }
     // if the user dont use English
     if (!isEnglish) {
       return (
-        <div className="search-error alert alert-danger" role="alert"><BiErrorAlt /> Search only in English</div>
+        <motion.div initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }} className="search-error alert alert-danger" role="alert"><BiErrorAlt /> Search only in English</motion.div>
       )
     }
 

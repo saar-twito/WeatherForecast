@@ -4,8 +4,9 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { FavoritesCitiesState, GoBackToFavoriteCity } from './favorites.interfaces';
 import { MdDeleteOutline } from "react-icons/md";
 import { removeCityFromFavorite } from './favoritesSlice';
-import './Favorites.scss'
 import { CityWeatherState, TemperatureUnits } from '../weather/weather.interfaces';
+import { motion } from "framer-motion"
+import './Favorites.scss'
 
 // @Component - responsible for managing favorites cities list
 const FavoritesCities = () => {
@@ -46,7 +47,7 @@ const FavoritesCities = () => {
   }
 
   return (
-    <div className="favorites-cities-wrapper">
+    <motion.div className="favorites-cities-wrapper" initial={{ x: '100vw' }} animate={{ x: 0 }} transition={{ duration: 0.7 }}>
       {favoriteCities.map((city) => (
         <div key={city.cityKey} className="card">
           <div className="card-body">
@@ -75,13 +76,15 @@ const FavoritesCities = () => {
             </header>
             <p className="card-text">{city.description}</p>
             <footer>
-              <button onClick={() => handleClickOnFiveDaysForecast(city.cityKey)} className="card-link">Show 5 days forecast</button>
-              <MdDeleteOutline onClick={() => removeCityFromFavoriteCities(city.cityKey)} />
+              <motion.button whileHover={{ x: 10 }} type="button" onClick={() => handleClickOnFiveDaysForecast(city.cityKey)} className="card-link">Show 5 days forecast</motion.button>
+              <motion.span whileHover={{ scale: 1.1 }}>
+                <MdDeleteOutline onClick={() => removeCityFromFavoriteCities(city.cityKey)} />
+              </motion.span>
             </footer>
           </div>
         </div>
       ))}
-    </div>
+    </motion.div>
   )
 }
 

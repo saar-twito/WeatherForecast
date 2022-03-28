@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import FiveDaysForecast from '../FiveDaysForecast/FiveDaysForecast';
 import { CityWeatherState, TemperatureUnits } from '../weather.interfaces';
 import { changeTemperatureUnit } from '../weatherSlice';
+import { motion } from "framer-motion"
 import './ShowWeatherInfo.scss'
 
 // @Component - responsible for showing weather info (main and forecasts)
@@ -14,7 +15,7 @@ const ShowWeatherInfo = () => {
   return (
     <>
       {weather.cityName ?
-        <div className="main-weather-info-wrapper">
+        <motion.div className="main-weather-info-wrapper" initial={{opacity:0 }} animate={{opacity:1}} transition={{ duration: 0.3}}>
 
           {/* City and current city's temperature */}
           <div className="city-info">
@@ -39,7 +40,7 @@ const ShowWeatherInfo = () => {
             }
           </div>
 
-        </div>
+        </motion.div>
         :
         null
       }

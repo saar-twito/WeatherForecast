@@ -10,6 +10,7 @@ import {
 } from 'react-icons/wi';
 import { useAppSelector } from '../../../app/hooks';
 import { CityWeatherState, ForecastDay, TemperatureUnits, TypeOfWeather } from '../weather.interfaces';
+import { motion } from "framer-motion"
 import './FiveDaysForecast.scss'
 
 // @Component - responsible for showing 5 days forecast.
@@ -62,7 +63,7 @@ const FiveDaysForecast = () => {
           case TypeOfWeather.PartlyCloudy:
             return <WiNightAltPartlyCloudy color={iconColor} size={iconSize} />;
 
-            
+
           case TypeOfWeather.PartlySunny:
             return <WiDayCloudy color={iconColor} size={iconSize} />;
 
@@ -96,7 +97,7 @@ const FiveDaysForecast = () => {
   }
 
   return (
-    <div className="five-day-forecast">
+    <motion.div className="five-day-forecast" initial={{ x: '-100vw' }} animate={{ x: 0 }} transition={{ duration: 1, delay: 0.3 }}>
       {weather.fiveDaysForecast.DailyForecasts.map((day) => (
         <div className="day" key={day.Date}>
 
@@ -112,7 +113,7 @@ const FiveDaysForecast = () => {
 
         </div>
       ))}
-    </div>
+    </motion.div>
   )
 }
 
