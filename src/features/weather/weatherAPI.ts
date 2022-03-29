@@ -13,8 +13,7 @@ const axiosInstance = axios.create({
 // Get list of cities base on search query
 export const getCitiesAutocompleteAPI = async (city: string): Promise<CityGeneralInfo[]> => {
   try {
-    const cities: CityGeneralInfo[] = (await axiosInstance.get(`locations/v1/cities/autocomplete`, { params: { q: city } })).data;
-    return cities
+    return (await axiosInstance.get<CityGeneralInfo[]>(`locations/v1/cities/autocomplete`, { params: { q: city } })).data;
   } catch (error) {
     throw new Error("City not found.");
   }
@@ -39,8 +38,7 @@ export const getCityWeatherAPI = async (cityName: string): Promise<{ cities: Cit
 // Get the weather info of of selected city
 export const getCityWeatherInfoByCityKeyAPI = async (cityKey: string): Promise<CityWeatherInfo[]> => {
   try {
-    const cityWeatherInfo: CityWeatherInfo[] = (await axiosInstance.get(`currentconditions/v1/${cityKey}`)).data;
-    return cityWeatherInfo
+    return (await axiosInstance.get<CityWeatherInfo[]>(`currentconditions/v1/${cityKey}`)).data;
   } catch (error) {
     throw new Error("City weather info is not available.");
   }
@@ -49,8 +47,7 @@ export const getCityWeatherInfoByCityKeyAPI = async (cityKey: string): Promise<C
 // Get five days weather forecast of selected city
 export const getFiveDaysForecastAPI = async (cityKey: string): Promise<FiveDaysCityForecast> => {
   try {
-    const fiveDaysCityForecast: FiveDaysCityForecast = (await axiosInstance.get(`forecasts/v1/daily/5day/${cityKey}`)).data
-    return fiveDaysCityForecast
+    return (await axiosInstance.get<FiveDaysCityForecast>(`forecasts/v1/daily/5day/${cityKey}`)).data
   } catch (error) {
     throw new Error("Weather forecasts is not available.");
   }
@@ -60,7 +57,7 @@ export const getFiveDaysForecastAPI = async (cityKey: string): Promise<FiveDaysC
 // Get the weather info base on user's location'
 export const getWeatherInfoByUserLocationAPI = async (latitude: number, longitude: number): Promise<{ cityWeatherInfo: CityWeatherInfo[]; cityInfo: CityInformation; }> => {
   try {
-    const cityInfo: CityInformation = (await axiosInstance.get(`locations/v1/cities/geoposition/search`, { params: { q: `${latitude},${longitude}` } })).data;
+    const cityInfo = (await axiosInstance.get<CityInformation>(`locations/v1/cities/geoposition/search`, { params: { q: `${latitude},${longitude}` } })).data;
     const cityWeatherInfo: CityWeatherInfo[] = await getCityWeatherInfoByCityKeyAPI(cityInfo.Key);
     return {
       cityWeatherInfo,

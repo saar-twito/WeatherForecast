@@ -25,8 +25,8 @@ const FiveDaysForecast = () => {
 
     return (
       <>
-        <p>{formattedDate}</p>
-        <p>{nameOfDay}</p>
+        <time>{formattedDate}</time>
+        <time>{nameOfDay}</time>
       </>
     )
   }
