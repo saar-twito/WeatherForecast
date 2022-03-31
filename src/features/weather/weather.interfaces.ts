@@ -4,6 +4,7 @@ export enum TemperatureUnits {
 }
 
 export enum TypeOfWeather {
+  Hot = "Hot",
   Sunny = "Sunny",
   MostlySunny = "Mostly sunny",
   PartlySunny = "Partly sunny",
@@ -14,6 +15,7 @@ export enum TypeOfWeather {
   Cloudy = "Cloudy",
   MostlyCloudy = "Mostly cloudy",
   HazySunshine = "Hazy sunshine",
+  HazyMoonlight = "Hazy moonlight",
   Dreary = "Dreary",
   Storm = "storms",
 }

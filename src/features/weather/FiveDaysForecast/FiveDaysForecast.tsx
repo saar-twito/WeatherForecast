@@ -6,8 +6,11 @@ import {
   WiMoonAltNew,
   WiNightClear,
   WiRainWind,
-  WiThunderstorm, WiNightAltPartlyCloudy
+  WiThunderstorm,
+  WiNightAltPartlyCloudy,
+  WiHot
 } from 'react-icons/wi';
+import { RiMoonFoggyLine } from "react-icons/ri";
 import { useAppSelector } from '../../../app/hooks';
 import { CityWeatherState, ForecastDay, TemperatureUnits, TypeOfWeather } from '../weather.interfaces';
 import { motion } from "framer-motion"
@@ -50,6 +53,10 @@ const FiveDaysForecast = () => {
       }
       else {
         switch (IconPhrase) {
+
+          case TypeOfWeather.Hot:
+            return <WiHot color={sunIconColor} size={iconSize} />;
+
           case TypeOfWeather.Sunny:
           case TypeOfWeather.MostlySunny:
             return <WiMoonAltNew color={sunIconColor} size={iconSize} />;
@@ -77,6 +84,8 @@ const FiveDaysForecast = () => {
           case TypeOfWeather.HazySunshine:
             return <WiDayHaze color={iconColor} size={iconSize} />;
 
+          case TypeOfWeather.HazyMoonlight:
+            return <RiMoonFoggyLine color={iconColor} size={iconSize} />;
 
           case TypeOfWeather.Dreary:
             return <WiCloud color={iconColor} size={iconSize} />;
@@ -97,9 +106,10 @@ const FiveDaysForecast = () => {
   }
 
   return (
-    <motion.div className="five-day-forecast" initial={{ x: '-100vw' }} animate={{ x: 0 }} transition={{ duration: 1, delay: 0.3 }}>
+    <motion.div className="five-day-forecast" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, delay: 0.5 }}>
+      {console.log(weather.fiveDaysForecast.DailyForecasts)}
       {weather.fiveDaysForecast.DailyForecasts.map((day) => (
-        <div className="day" key={day.Date}>
+        <motion.div className="day" key={day.Date} whileHover={{ scale: 1.2 }} transition={{ type: 'spring', stiffness: 500 }}>
 
           <header>{handleDateFormat(day.Date)}</header>
 
@@ -111,7 +121,7 @@ const FiveDaysForecast = () => {
             {getWeatherIcon(day)}
           </footer>
 
-        </div>
+        </motion.div>
       ))}
     </motion.div>
   )

@@ -6,7 +6,6 @@ import { showErrorNotification } from '../../shared/toastNotification';
 import { CityWeatherState } from './weather.interfaces';
 import SearchCountry from './SearchCity/SearchCity';
 import { useLocation } from 'react-router-dom';
-import { motion } from "framer-motion"
 import { GoBackToFavoriteCity } from '../favorites/favorites.interfaces';
 
 
