@@ -107,7 +107,6 @@ const FiveDaysForecast = () => {
 
   return (
     <motion.div className="five-day-forecast" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, delay: 0.5 }}>
-      {console.log(weather.fiveDaysForecast.DailyForecasts)}
       {weather.fiveDaysForecast.DailyForecasts.map((day) => (
         <motion.div className="day" key={day.Date} whileHover={{ scale: 1.2 }} transition={{ type: 'spring', stiffness: 500 }}>
 
