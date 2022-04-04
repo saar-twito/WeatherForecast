@@ -31,8 +31,7 @@ const Weather = () => {
   const getCityInfo = async (desireCity: string = weather.userQuerySearch) => {
     try {
       // If there is no desired city, use the query search.
-      await dispatch(getCityWeatherInfo(desireCity.split(',')[1].trim())).unwrap()
-
+      dispatch(getCityWeatherInfo(desireCity.split(',')[1].trim()))
     } catch (e: any) {
       showErrorNotification(e.message)
     }
@@ -41,7 +40,7 @@ const Weather = () => {
 
   const getFiveDaysForecastForCity = async (cityKey: string = weather.cities[0]?.Key || TEL_AVIV_CITY_KEY) => {
     try {
-      await dispatch(getFiveDaysWeatherForecast(cityKey)).unwrap();
+      dispatch(getFiveDaysWeatherForecast(cityKey))
     } catch (e: any) {
       showErrorNotification(e.message)
     }

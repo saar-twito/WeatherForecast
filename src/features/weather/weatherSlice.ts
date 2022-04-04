@@ -51,21 +51,21 @@ const initialState: CityWeatherState = {
 export const getCitiesAutocomplete = createAsyncThunk(
   'weather/getCitiesAutocomplete',
   async (location: string): Promise<CityGeneralInfo[]> => {
-    return await getCitiesAutocompleteAPI(location)
+    return getCitiesAutocompleteAPI(location)
   }
 )
 
 export const getCityWeatherInfo = createAsyncThunk(
   'weather/getCityWeatherInfo',
   async (defaultCity: string): Promise<{ cities: CityGeneralInfo[]; cityWeatherData: CityWeatherInfo[]; }> => {
-    return await getCityWeatherAPI(defaultCity)
+    return getCityWeatherAPI(defaultCity)
   }
 )
 
 export const getCityWeatherInfoByCityKey = createAsyncThunk(
   'weather/getCityWeatherInfoByCityKey',
   async (cityKey: string): Promise<CityWeatherInfo[]> => {
-    return await getCityWeatherInfoByCityKeyAPI(cityKey)
+    return getCityWeatherInfoByCityKeyAPI(cityKey)
   }
 )
 
@@ -73,14 +73,14 @@ export const getCityWeatherInfoByCityKey = createAsyncThunk(
 export const getFiveDaysWeatherForecast = createAsyncThunk(
   'weather/getFiveDaysWeatherForecast',
   async (cityKey: string): Promise<FiveDaysCityForecast> => {
-    return await getFiveDaysForecastAPI(cityKey)
+    return getFiveDaysForecastAPI(cityKey)
   }
 )
 
 export const getWeatherInfoByUserLocation = createAsyncThunk(
   'weather/getWeatherInfoByUserLocation',
   async (coordinates: { latitude: number, longitude: number }): Promise<{ cityWeatherInfo: CityWeatherInfo[]; cityInfo: CityInformation; }> => {
-    return await getWeatherInfoByUserLocationAPI(coordinates.latitude, coordinates.longitude);
+    return getWeatherInfoByUserLocationAPI(coordinates.latitude, coordinates.longitude);
   }
 )
 

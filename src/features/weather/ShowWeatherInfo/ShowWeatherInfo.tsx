@@ -15,7 +15,7 @@ const ShowWeatherInfo = () => {
   return (
     <>
       {weather.cityName ?
-        <motion.div className="main-weather-info-wrapper" initial={{opacity:0 }} animate={{opacity:1}} transition={{ duration: 0.5}}>
+        <motion.div className="main-weather-info-wrapper" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
 
           {/* City and current city's temperature */}
           <div className="city-info">
@@ -25,7 +25,7 @@ const ShowWeatherInfo = () => {
 
           {/* Switch between units (C,F) */}
           <div className='temperature'>
-            {weather.temperatureUnit === TemperatureUnits.Celsius  ?
+            {weather.temperatureUnit === TemperatureUnits.Celsius ?
               <>
                 <p className="temperature-value">{weather.cityWeatherInfo.Temperature.Metric.Value.toFixed(0)}</p>
                 <sup className="active-unit">&#x2103;</sup>

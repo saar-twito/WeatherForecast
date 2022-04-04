@@ -35,12 +35,12 @@ const SearchCountry = () => {
     if (isFirstRendering) setIsFirstRendering(false);
 
     // If user click on option
-    if (query.includes(',')) await updateState();
+    if (query.includes(',')) updateState();
 
     // when user typing...
     else if (isAlpha(query, "en-US", { ignore: " " })) {
       setIsEnglish(true);
-      await updateState();
+      updateState();
     }
 
     // if user typing in non-english characters
@@ -52,15 +52,15 @@ const SearchCountry = () => {
       if (city) {
         try {
           dispatch(updateCityGeneralInfo(city));
-          await dispatch(getCityWeatherInfoByCityKey(city.Key)).unwrap();
-          await dispatch(getFiveDaysWeatherForecast(city.Key)).unwrap();
+          dispatch(getCityWeatherInfoByCityKey(city.Key))
+          dispatch(getFiveDaysWeatherForecast(city.Key))
         } catch (e: any) {
           showErrorNotification(e.message);
         }
       }
       else {
         try {
-          await dispatch(getCitiesAutocomplete(query)).unwrap();
+          dispatch(getCitiesAutocomplete(query))
         } catch (e: any) {
           showErrorNotification(e.message);
         }
@@ -72,7 +72,6 @@ const SearchCountry = () => {
 
 
   const isUserGeolocationAvailable = () => {
-
     // Check if geolocation available
     if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getUserWeatherLocation);
     else showInfoNotification('This browser does not support location share.', 3000)
@@ -83,8 +82,8 @@ const SearchCountry = () => {
 
       try {
         const { cityInfo } = await dispatch(getWeatherInfoByUserLocation(position.coords)).unwrap();
-        await dispatch(getCitiesAutocomplete(cityInfo.EnglishName)).unwrap();
-        await dispatch(getFiveDaysWeatherForecast(cityInfo.Key)).unwrap();
+        dispatch(getCitiesAutocomplete(cityInfo.EnglishName));
+        dispatch(getFiveDaysWeatherForecast(cityInfo.Key));
       } catch (e: any) {
         showErrorNotification(e.message)
       }
@@ -94,9 +93,9 @@ const SearchCountry = () => {
 
   const handleAddingCityToFavorite = () => {
     const { cities, cityName, countryNameShort, cityWeatherInfo, fiveDaysForecast } = weather;
-    if (favorite.favoriteCities.find(c => c.cityKey === cities[0].Key)) {
+    if (favorite.favoriteCities.find(c => c.cityKey === cities[0].Key))
       showInfoNotification(`${cityName} already added to favorites cities`, 3000)
-    }
+
     else {
       const cityToFavorite: FavoriteCity = {
         cityKey: cities[0].Key,
@@ -157,8 +156,6 @@ const SearchCountry = () => {
           className="search-error alert alert-danger" role="alert"><BiErrorAlt /> Search only in English</motion.div>
       )
     }
-
-
   }
 
   return (
