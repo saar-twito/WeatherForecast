@@ -35,35 +35,36 @@ const SearchCountry = () => {
     if (isFirstRendering) setIsFirstRendering(false);
 
     // If user click on option
-    if (query.includes(',')) updateState();
+    if (query.includes(',')) updateState(query);
 
     // when user typing...
     else if (isAlpha(query, "en-US", { ignore: " " })) {
       setIsEnglish(true);
-      updateState();
+      updateState(query);
     }
 
     // if user typing in non-english characters
     else setIsEnglish(false)
+  }
 
-    async function updateState() {
-      dispatch(updateUserQuery(query));
-      const city = weather.cities.find(c => `${c.Country.ID}, ${c.LocalizedName}` === query);
-      if (city) {
-        try {
-          dispatch(updateCityGeneralInfo(city));
-          dispatch(getCityWeatherInfoByCityKey(city.Key))
-          dispatch(getFiveDaysWeatherForecast(city.Key))
-        } catch (e: any) {
-          showErrorNotification(e.message);
-        }
+
+  const updateState = async (query: string) => {
+    dispatch(updateUserQuery(query));
+    const city = weather.cities.find(c => `${c.Country.ID}, ${c.LocalizedName}` === query);
+    if (city) {
+      try {
+        dispatch(updateCityGeneralInfo(city));
+        dispatch(getCityWeatherInfoByCityKey(city.Key))
+        dispatch(getFiveDaysWeatherForecast(city.Key))
+      } catch (e: any) {
+        showErrorNotification(e.message);
       }
-      else {
-        try {
-          dispatch(getCitiesAutocomplete(query))
-        } catch (e: any) {
-          showErrorNotification(e.message);
-        }
+    }
+    else {
+      try {
+        dispatch(getCitiesAutocomplete(query))
+      } catch (e: any) {
+        showErrorNotification(e.message);
       }
     }
   }
@@ -75,18 +76,18 @@ const SearchCountry = () => {
     // Check if geolocation available
     if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getUserWeatherLocation);
     else showInfoNotification('This browser does not support location share.', 3000)
+  }
 
-    // Get user location coordinates
-    async function getUserWeatherLocation(position: GeolocationPosition) {
-      dispatch(isUserAskedForItsLocation())
+  // Get user location coordinates
+  const getUserWeatherLocation = async (position: GeolocationPosition) => {
+    dispatch(isUserAskedForItsLocation())
 
-      try {
-        const { cityInfo } = await dispatch(getWeatherInfoByUserLocation(position.coords)).unwrap();
-        dispatch(getCitiesAutocomplete(cityInfo.EnglishName));
-        dispatch(getFiveDaysWeatherForecast(cityInfo.Key));
-      } catch (e: any) {
-        showErrorNotification(e.message)
-      }
+    try {
+      const { cityInfo } = await dispatch(getWeatherInfoByUserLocation(position.coords)).unwrap();
+      dispatch(getCitiesAutocomplete(cityInfo.EnglishName));
+      dispatch(getFiveDaysWeatherForecast(cityInfo.Key));
+    } catch (e: any) {
+      showErrorNotification(e.message)
     }
   }
 
@@ -131,7 +132,9 @@ const SearchCountry = () => {
           variants={messagesVariants}
           initial="initial"
           animate="animate"
-          className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</motion.div>
+          className="city-not-found alert alert-info" role="alert">
+          <BiInfoCircle /> City not found
+        </motion.div>
       )
     }
 
@@ -142,8 +145,9 @@ const SearchCountry = () => {
           variants={messagesVariants}
           initial="initial"
           animate="animate"
-
-          className="city-not-found alert alert-info" role="alert"><BiInfoCircle /> City not found</motion.div>
+          className="city-not-found alert alert-info" role="alert">
+          <BiInfoCircle /> City not found
+        </motion.div>
       )
     }
     // if the user dont use English
@@ -153,7 +157,9 @@ const SearchCountry = () => {
           variants={messagesVariants}
           initial="initial"
           animate="animate"
-          className="search-error alert alert-danger" role="alert"><BiErrorAlt /> Search only in English</motion.div>
+          className="search-error alert alert-danger" role="alert">
+          <BiErrorAlt /> Search only in English
+        </motion.div>
       )
     }
   }
@@ -176,7 +182,10 @@ const SearchCountry = () => {
 
         {/* List of cities base on user search*/}
         <datalist id="countries">
-          {weather.cities?.map((city) => <option key={city.Key} value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
+          {weather.cities?.map((city) =>
+            <option
+              key={city.Key}
+              value={`${city.Country.ID}, ${city.LocalizedName}`} />)}
         </datalist>
 
         {/* User location button */}
@@ -187,13 +196,22 @@ const SearchCountry = () => {
               &nbsp;Loading...
             </button>
             :
-            <button type='button' className="my-location" onClick={() => isUserGeolocationAvailable()}><BiLocationPlus className="user-location" />
+            <button
+              type='button'
+              className="my-location"
+              onClick={() => isUserGeolocationAvailable()}>
+              <BiLocationPlus className="user-location" />
               My Location
             </button>
         }
       </div>
 
-      <button type="button" className="save" onClick={() => handleAddingCityToFavorite()}>Save </button>
+      <button
+        type="button"
+        className="save"
+        onClick={() => handleAddingCityToFavorite()}>
+        Save
+      </button>
 
     </div>
   )
