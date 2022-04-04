@@ -22,8 +22,7 @@
   }
 
   .temperature {
-    box-shadow: #32325d40 7px 7px 5px -1px, #0000004d 3px 4px 3px -1px;
-    background-color: #fffafa70;
+    box-shadow: #6c757d 7px 7px 5px -1px, #0000004d 3px 4px 3px -1px;
     padding: 24px;
     width: 160px;
     margin: 20px auto;
@@ -36,7 +35,7 @@
     position: relative;
 
     .temperature-value {
-      font-size: 2.3rem;
+      font-size: 3.3rem;
       margin: 0;
     }
     .active-unit {

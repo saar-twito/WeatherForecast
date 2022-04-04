@@ -26,13 +26,18 @@
     align-items: baseline;
 
     .search-input-by-city {
-      background: snow;
-      border-radius: 5px;
       border: none;
+      background: transparent;
+      border-bottom: 1px solid #212529;
       font-family: "Inter", sans-serif;
       margin-bottom: 5px;
       outline: none;
+      color:aliceblue;
       padding: 6px;
+
+      &::placeholder {
+        color: rgba(240, 248, 255, 0.805)
+      }
     }
 
     .city-not-found,
@@ -50,7 +55,7 @@
     }
 
     .my-location {
-      @include searchAndUserLocationButtons(#387bde);
+      @include searchAndUserLocationButtons(#3a5d80);
       display: flex;
       width: 133px;
 
@@ -62,7 +67,7 @@
   }
 
   .save {
-    @include searchAndUserLocationButtons(#299563);
+    @include searchAndUserLocationButtons(#2e4c9b);
     width: 67px;
   }
 }

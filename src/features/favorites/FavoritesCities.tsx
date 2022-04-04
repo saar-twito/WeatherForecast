@@ -76,7 +76,16 @@ const FavoritesCities = () => {
             </header>
             <p className="card-text">{city.description}</p>
             <footer>
-              <motion.button whileHover={{ x: 10 }} type="button" onClick={() => handleClickOnFiveDaysForecast(city.cityKey)} className="card-link">Show 5 days forecast</motion.button>
+              
+              <motion.button
+                whileHover={{ x: 10 }}
+                whileTap={{ x: 10 }}
+                type="button"
+                onClick={() => handleClickOnFiveDaysForecast(city.cityKey)}
+                className="card-link">
+                Show 5 days forecast
+              </motion.button>
+
               <motion.span whileHover={{ scale: 1.1 }}>
                 <MdDeleteOutline onClick={() => removeCityFromFavoriteCities(city.cityKey)} />
               </motion.span>

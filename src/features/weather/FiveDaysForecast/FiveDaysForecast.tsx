@@ -40,7 +40,7 @@ const FiveDaysForecast = () => {
 
 
   const getWeatherIcon = (day: ForecastDay): JSX.Element => {
-    const iconSize = 30;
+    const iconSize = 35;
     const iconColor = "gray"
     const sunIconColor = "#ffec07"
 
@@ -106,9 +106,19 @@ const FiveDaysForecast = () => {
   }
 
   return (
-    <motion.div className="five-day-forecast" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, delay: 0.5 }}>
+    <motion.div
+      className="five-day-forecast"
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ duration: 1, delay: 0.5 }}>
+
       {weather.fiveDaysForecast.DailyForecasts.map((day) => (
-        <motion.div className="day" key={day.Date} whileHover={{ scale: 1.2 }} transition={{ type: 'spring', stiffness: 500 }}>
+        <motion.div
+          className="day"
+          key={day.Date}
+          whileHover={{ scale: 1.2 }}
+          transition={{ type: 'spring', stiffness: 500 }}
+          whileTap={{ scale: 1.2 }}>
 
           <header>{handleDateFormat(day.Date)}</header>
 
