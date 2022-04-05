@@ -54,6 +54,10 @@
       }
     }
 
+    .my-location-loading{
+      @include searchAndUserLocationButtons(#3a5d80);
+    }
+
     .my-location {
       @include searchAndUserLocationButtons(#3a5d80);
       display: flex;
