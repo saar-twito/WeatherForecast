@@ -45,12 +45,12 @@
       display: flex;
       align-items: center;
       width: -webkit-fill-available;
-      padding: 0.5rem 0.5rem;
+      padding: 8px 8px;
       margin-bottom: 10px;
 
       :first-child {
         margin-right: 5px;
-        font-size: 21px;
+        font-size: 1.31rem;
       }
     }
 
@@ -60,7 +60,7 @@
       width: 133px;
 
       .user-location {
-        font-size: 20px;
+        font-size: 1.25rem;
         margin-right: 5px;
       }
     }
