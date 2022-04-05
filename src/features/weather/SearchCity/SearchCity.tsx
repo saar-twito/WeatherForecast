@@ -48,6 +48,7 @@ const SearchCountry = () => {
   }
 
 
+  // Updating several things in our state
   const updateState = async (query: string) => {
     dispatch(updateUserQuery(query));
     const city = weather.cities.find(c => `${c.Country.ID}, ${c.LocalizedName}` === query);

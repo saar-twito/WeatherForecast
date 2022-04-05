@@ -15,7 +15,11 @@ const ShowWeatherInfo = () => {
   return (
     <>
       {weather.cityName ?
-        <motion.div className="main-weather-info-wrapper" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        <motion.div
+          className="main-weather-info-wrapper"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}>
 
           {/* City and current city's temperature */}
           <div className="city-info">

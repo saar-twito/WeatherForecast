@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { FavoritesCitiesState } from '../../features/favorites/favorites.interfaces';
 import { showInfoNotification } from '../../shared/toastNotification';
+import Routes from '../../shared/routes';
 
 
 const NavigationBar = () => {
@@ -33,10 +34,10 @@ const NavigationBar = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <NavLink className="nav-link" to="/weather">Weather</NavLink>
+                <NavLink className="nav-link" to={Routes.weather}>Weather</NavLink>
               </li>
               <li className="nav-item">
-                <NavLink onClick={(e) => handleFavoriteNavigation(e)} className="nav-link" to="/favorites">Favorites</NavLink>
+                <NavLink onClick={(e) => handleFavoriteNavigation(e)} className="nav-link" to={Routes.favorites}>Favorites</NavLink>
               </li>
             </ul>
           </div>

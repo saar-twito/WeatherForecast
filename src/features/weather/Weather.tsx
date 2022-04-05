@@ -11,7 +11,7 @@ import { GoBackToFavoriteCity } from '../favorites/favorites.interfaces';
 
 // @Component - centralize searching city, user location, weather info and weather forecast
 const Weather = () => {
-  const TEL_AVIV_CITY_KEY = '215854';
+  const telAvivCityKey = '215854';
 
   const weather: CityWeatherState = useAppSelector((state) => state.weather)
   const dispatch = useAppDispatch();
@@ -38,7 +38,7 @@ const Weather = () => {
   }
 
 
-  const getFiveDaysForecastForCity = async (cityKey: string = weather.cities[0]?.Key || TEL_AVIV_CITY_KEY) => {
+  const getFiveDaysForecastForCity = async (cityKey: string = weather.cities[0]?.Key || telAvivCityKey) => {
     try {
       dispatch(getFiveDaysWeatherForecast(cityKey))
     } catch (e: any) {
