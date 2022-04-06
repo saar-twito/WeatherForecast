@@ -102,7 +102,6 @@ export interface FiveDaysCityForecast {
     Text: string,
   },
   DailyForecasts: ForecastDay[];
-
 }
 
 

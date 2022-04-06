@@ -26,9 +26,7 @@ const SearchCountry = () => {
   const { weather, favorite } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    return () => debouncedChangeHandler.cancel();
-  }, [])
+  useEffect(() => () => debouncedChangeHandler.cancel(), [])
 
 
   const handleCitySearch = async (query: string) => {

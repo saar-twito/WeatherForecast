@@ -22,7 +22,7 @@ const FiveDaysForecast = () => {
   const weather: CityWeatherState = useAppSelector(state => state.weather);
 
 
-  const handleDateFormat = (date: string): JSX.Element => {
+  const handleDateFormat = (date: string) => {
     const formattedDate = date.substring(5, 10).replace('-', '/');
     const nameOfDay = new Date(date).toDateString().substring(0, 4)
 
@@ -34,12 +34,12 @@ const FiveDaysForecast = () => {
     )
   }
 
-  const fahrenheitToCelsius = (fahrenheitMin: number, fahrenheitMax: number): JSX.Element => (
+  const fahrenheitToCelsius = (fahrenheitMin: number, fahrenheitMax: number) => (
     <p>{((fahrenheitMin - 32) * 5 / 9).toFixed(0)}&#176; / {((fahrenheitMax - 32) * 5 / 9).toFixed(0)}&#176;</p>
   )
 
 
-  const getWeatherIcon = (day: ForecastDay): JSX.Element => {
+  const getWeatherIcon = (day: ForecastDay) => {
     const iconSize = 35;
     const iconColor = "gray"
     const sunIconColor = "#ffec07"

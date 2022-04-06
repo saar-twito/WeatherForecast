@@ -16,7 +16,6 @@ export interface GoBackToFavoriteCity {
 }
 
 
-
 export interface FavoritesCitiesState {
   favoriteCities: FavoriteCity[]
 }

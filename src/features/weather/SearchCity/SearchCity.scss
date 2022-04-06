@@ -20,6 +20,7 @@
   gap: 32px;
 
   .search-location {
+    $color: #3a5d80;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -32,11 +33,11 @@
       font-family: "Inter", sans-serif;
       margin-bottom: 5px;
       outline: none;
-      color:aliceblue;
+      color: aliceblue;
       padding: 6px;
 
       &::placeholder {
-        color: rgba(240, 248, 255, 0.805)
+        color: #f0f8ffcd;
       }
     }
 
@@ -54,12 +55,12 @@
       }
     }
 
-    .my-location-loading{
-      @include searchAndUserLocationButtons(#3a5d80);
+    .my-location-loading {
+      @include searchAndUserLocationButtons($color);
     }
 
     .my-location {
-      @include searchAndUserLocationButtons(#3a5d80);
+      @include searchAndUserLocationButtons($color);
       display: flex;
       width: 133px;
 

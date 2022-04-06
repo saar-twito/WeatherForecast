@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   CityGeneralInfo,
   CityInformation,
@@ -88,7 +88,7 @@ export const weatherSlice = createSlice({
   name: 'weather',
   initialState,
   reducers: {
-    updateUserQuery: (state, { payload }: PayloadAction<string>) => {
+    updateUserQuery: (state, { payload }) => {
       state.userQuerySearch = payload
     },
 
@@ -115,7 +115,7 @@ export const weatherSlice = createSlice({
       }
     },
 
-    updateCityGeneralInfo: (state, { payload }: PayloadAction<CityGeneralInfo>) => {
+    updateCityGeneralInfo: (state, { payload }) => {
       state.cityName = payload.LocalizedName;
       state.countryNameShort = payload.Country.ID;
     },
