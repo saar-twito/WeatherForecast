@@ -1,9 +1,11 @@
+@import "../../../shared/colors";
+
 @mixin searchAndUserLocationButtons($background) {
   padding: 5px;
   background-color: $background;
   border: none;
   outline: none;
-  color: snow;
+  color: $snow;
   border-radius: 5px;
   transition: background-color 0.2s;
 
@@ -20,7 +22,6 @@
   gap: 32px;
 
   .search-location {
-    $color: #3a5d80;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,15 +30,15 @@
     .search-input-by-city {
       border: none;
       background: transparent;
-      border-bottom: 1px solid #212529;
+      border-bottom: 1px solid $searchCityInputBorder;
       font-family: "Inter", sans-serif;
       margin-bottom: 5px;
       outline: none;
-      color: aliceblue;
+      color: $aliceblue;
       padding: 6px;
 
       &::placeholder {
-        color: #f0f8ffcd;
+        color: $searchCityInputPlaceholder;
       }
     }
 
@@ -56,11 +57,11 @@
     }
 
     .my-location-loading {
-      @include searchAndUserLocationButtons($color);
+      @include searchAndUserLocationButtons($userLocation);
     }
 
     .my-location {
-      @include searchAndUserLocationButtons($color);
+      @include searchAndUserLocationButtons($userLocation);
       display: flex;
       width: 133px;
 
@@ -72,7 +73,7 @@
   }
 
   .save {
-    @include searchAndUserLocationButtons(#2e4c9b);
+    @include searchAndUserLocationButtons($saveCity);
     width: 67px;
   }
 }

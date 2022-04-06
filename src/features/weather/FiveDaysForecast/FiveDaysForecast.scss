@@ -1,3 +1,6 @@
+@import "../../../shared/colors";
+
+
 .five-day-forecast {
   display: flex;
   justify-content: space-evenly;
@@ -8,7 +11,7 @@
 
   .day {
     box-shadow: #32325d40 0px 2px 5px -1px, #0000004d 0px 1px 3px -1px;
-    background: aliceblue;
+    background:$aliceblue;
     display: flex;
     flex-direction: column;
     justify-content: center;
