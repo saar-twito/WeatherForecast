@@ -68,7 +68,7 @@ const SearchCountry = () => {
     }
   }
 
-  const debouncedChangeHandler = debounce(handleCitySearch, 500);
+  const debouncedChangeHandler = debounce(handleCitySearch, 300);
 
 
   const isUserGeolocationAvailable = () => {
